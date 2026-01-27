@@ -1,6 +1,6 @@
 [gd_resource type="Sky" load_steps=8 format=3 uid="uid://boe6kl55ojwal"]
 
-[ext_resource type="Shader" uid="uid://cedbxm7b0iu5y" path="res://_MUSHI/Skybox/Sky.gdshader" id="1_muq6t"]
+[ext_resource type="Shader" uid="uid://cu8bs2df8mlo6" path="res://_MUSHI/Skybox/Sky.gdshader" id="1_muq6t"]
 [ext_resource type="Texture2D" uid="uid://m861b73plvlh" path="res://_MUSHI/Skybox/GradientAfternoon.tres" id="2_7eg3b"]
 [ext_resource type="Texture2D" uid="uid://dosbbrlllcpbb" path="res://_MUSHI/Skybox/GradientEvening.tres" id="3_l36u2"]
 [ext_resource type="Texture2D" uid="uid://c0n7i526w8x7s" path="res://_MUSHI/Skybox/GradientMidday.tres" id="4_7skpk"]
