@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://m68qgrrb63q7"
+path="res://.godot/imported/CRTEffect.glsl-f90a8e8e6f5d1bdd77fb6958e6cbbe43.res"
+
+[deps]
+
+source_file="res://Compositor/CompositorEffects/CRTEffect.glsl"
+dest_files=["res://.godot/imported/CRTEffect.glsl-f90a8e8e6f5d1bdd77fb6958e6cbbe43.res"]
+
+[params]
+

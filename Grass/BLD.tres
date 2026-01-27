@@ -1,0 +1,31 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://cj5vnws5iba03"]
+
+[ext_resource type="Shader" uid="uid://d1dxa0m2qiafi" path="res://Grass/GrassPBR.gdshader" id="1_65rse"]
+
+[sub_resource type="Gradient" id="Gradient_65rse"]
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_7ovvj"]
+gradient = SubResource("Gradient_65rse")
+
+[resource]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("1_65rse")
+shader_parameter/ToonRampOffset = 0.671
+shader_parameter/ToonRampSmoothness = 0.985
+shader_parameter/ToonRampTinting = Color(0.503836, 4.81308e-08, 0.259267, 1)
+shader_parameter/RimPower = 1.0
+shader_parameter/RimCutOff = 0.564
+shader_parameter/RimSmoothness = 0.0
+shader_parameter/RimLightBrightness = 0.272
+shader_parameter/fadeout_start_distance = 10.0
+shader_parameter/fadeout_end_distance = 20.0
+shader_parameter/sink_amount = 0.0
+shader_parameter/wind_strength = 0.0
+shader_parameter/wind_speed = 10.0
+shader_parameter/wind_noise_scale = 1.0
+shader_parameter/wind_direction = Vector2(1, 0)
+shader_parameter/gradient_texture = SubResource("GradientTexture1D_7ovvj")
+shader_parameter/backface_culling = true
+shader_parameter/use_world_up_normal = false
+shader_parameter/gradient_height = 10.0

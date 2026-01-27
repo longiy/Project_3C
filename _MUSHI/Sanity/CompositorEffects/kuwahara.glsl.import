@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://cocxix410qk3p"
+path="res://.godot/imported/kuwahara.glsl-9f60137a9b10090520aaa2ccb7c5b354.res"
+
+[deps]
+
+source_file="res://_MUSHI/Sanity/CompositorEffects/kuwahara.glsl"
+dest_files=["res://.godot/imported/kuwahara.glsl-9f60137a9b10090520aaa2ccb7c5b354.res"]
+
+[params]
+

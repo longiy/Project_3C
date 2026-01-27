@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="MovementConfig" load_steps=2 format=3 uid="uid://cm4kgu5akids1"]
+
+[ext_resource type="Script" uid="uid://bkv8he7g4u73k" path="res://Scripts/Character/MovementConfig.gd" id="1_sn0ev"]
+
+[resource]
+script = ExtResource("1_sn0ev")
+walk_speed = 1.3
+run_speed = 3.0
+sprint_speed = 6.3
+speed_transition_rate = 4.0
+acceleration = 30.0
+deceleration = 10.0
+air_direction_control = 0.3
+air_rotation_control = 0.1
+jump_height = 1.5
+gravity = -20.0
+coyote_time = 0.15
+jump_buffer_time = 0.1
+rotation_speed = 8.0
+min_rotation_speed = 0.1
+speed_rotation_reduction = 0.7
+enable_directional_snapping = false
+snap_angle_degrees = 45.0
+max_rotation_influence = 1.0
+rotation_influence_start_speed = 2.0
+rotation_influence_curve = 1.0
+momentum_rotation_bonus = 0.2
+camera_align_on_movement = true
+camera_align_rotation_speed = 5.0
+gamepad_movement_multiplier = 1.0
+gamepad_acceleration_multiplier = 1.2
+gamepad_rotation_speed_multiplier = 1.1

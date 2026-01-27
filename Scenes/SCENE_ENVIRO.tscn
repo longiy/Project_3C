@@ -1,0 +1,142 @@
+[gd_scene load_steps=12 format=3 uid="uid://c7lyd0ltxwa8"]
+
+[ext_resource type="Sky" uid="uid://boe6kl55ojwal" path="res://_MUSHI/Skybox/SkyboxMaster.tres" id="1_endwm"]
+[ext_resource type="Compositor" uid="uid://bcyp2ypwknqlp" path="res://_MUSHI/Sanity/SanityCompositor.tres" id="2_endwm"]
+[ext_resource type="PackedScene" uid="uid://diueuwbtv4w82" path="res://Scenes/CCC.tscn" id="3_woqci"]
+[ext_resource type="PackedScene" uid="uid://osh7lqk4p408" path="res://Assets/Environment/mushi_map_v_2.tscn" id="4_endwm"]
+[ext_resource type="Script" uid="uid://whkbn12eoeed" path="res://_MUSHI/Sanity/SanityTrigger.gd" id="6_ndw8l"]
+
+[sub_resource type="Environment" id="Environment_w862e"]
+background_mode = 2
+sky = ExtResource("1_endwm")
+ambient_light_source = 2
+ambient_light_color = Color(0.0482935, 0.425166, 0.589364, 1)
+ambient_light_energy = 2.0
+reflected_light_source = 2
+ssr_enabled = true
+sdfgi_use_occlusion = true
+glow_normalized = true
+glow_strength = 2.0
+glow_bloom = 0.1
+glow_hdr_threshold = 1.29
+fog_light_color = Color(0.673005, 0.903439, 0.916402, 1)
+fog_density = 0.001
+fog_aerial_perspective = 1.0
+volumetric_fog_albedo = Color(0.906114, 0.830647, 0.742678, 1)
+volumetric_fog_emission = Color(0.918557, 0.864031, 0.682974, 1)
+volumetric_fog_emission_energy = 2.0
+volumetric_fog_gi_inject = 16.0
+volumetric_fog_length = 200.0
+volumetric_fog_ambient_inject = 1.0
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_endwm"]
+auto_exposure_scale = 0.2
+
+[sub_resource type="BoxMesh" id="BoxMesh_endwm"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_woqci"]
+size = Vector3(1, 0.2, 1)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_ndw8l"]
+data = PackedVector3Array(-0.5, 0.1, 0.5, 0.5, 0.1, 0.5, -0.5, -0.1, 0.5, 0.5, 0.1, 0.5, 0.5, -0.1, 0.5, -0.5, -0.1, 0.5, 0.5, 0.1, -0.5, -0.5, 0.1, -0.5, 0.5, -0.1, -0.5, -0.5, 0.1, -0.5, -0.5, -0.1, -0.5, 0.5, -0.1, -0.5, 0.5, 0.1, 0.5, 0.5, 0.1, -0.5, 0.5, -0.1, 0.5, 0.5, 0.1, -0.5, 0.5, -0.1, -0.5, 0.5, -0.1, 0.5, -0.5, 0.1, -0.5, -0.5, 0.1, 0.5, -0.5, -0.1, -0.5, -0.5, 0.1, 0.5, -0.5, -0.1, 0.5, -0.5, -0.1, -0.5, 0.5, 0.1, 0.5, -0.5, 0.1, 0.5, 0.5, 0.1, -0.5, -0.5, 0.1, 0.5, -0.5, 0.1, -0.5, 0.5, 0.1, -0.5, -0.5, -0.1, 0.5, 0.5, -0.1, 0.5, -0.5, -0.1, -0.5, 0.5, -0.1, 0.5, 0.5, -0.1, -0.5, -0.5, -0.1, -0.5)
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_t54pj"]
+radius = 2.2436523
+
+[node name="Scene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_w862e")
+camera_attributes = SubResource("CameraAttributesPractical_endwm")
+compositor = ExtResource("2_endwm")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.91212, -0.189281, 0.363606, 0, 0.88701, 0.461749, -0.409923, -0.42117, 0.80906, -0.946876, 1.747, -2.87392)
+shadow_enabled = true
+shadow_bias = 0.0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 200.0
+
+[node name="SpotLight3D" type="SpotLight3D" parent="."]
+transform = Transform3D(0.688025, -0.191953, 0.699839, -1.49012e-08, 0.964382, 0.264513, -0.725687, -0.181991, 0.663519, 9.1058, 143.968, -167.174)
+visible = false
+light_color = Color(0.925825, 0.466993, 0.165723, 1)
+light_energy = 5000.0
+shadow_enabled = true
+shadow_bias = 0.01
+shadow_normal_bias = 0.0
+spot_range = 11.982
+spot_angle = 20.5861
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="."]
+transform = Transform3D(0.688025, -0.191953, 0.699839, -1.49012e-08, 0.964382, 0.264512, -0.725687, -0.181991, 0.663519, 71.3644, 154.289, -114.748)
+visible = false
+light_color = Color(0.925825, 0.466993, 0.165723, 1)
+light_energy = 5000.0
+shadow_enabled = true
+shadow_bias = 0.2
+spot_range = 274.975
+spot_angle = 43.9079
+
+[node name="MUSHI_Map_V2" parent="." instance=ExtResource("4_endwm")]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.92327, 140.643, -170.784)
+mesh = SubResource("BoxMesh_endwm")
+
+[node name="CCC" parent="." groups=["player"] instance=ExtResource("3_woqci")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2802, 9.86112, -77.4471)
+
+[node name="Step" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.78027, -0.221892, 0)
+mesh = SubResource("BoxMesh_woqci")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Step"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Step/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ndw8l")
+
+[node name="Step2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.06819, -0.016374, 0)
+mesh = SubResource("BoxMesh_woqci")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Step2"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Step2/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ndw8l")
+
+[node name="Step3" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.39534, 0.191661, 0)
+mesh = SubResource("BoxMesh_woqci")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Step3"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Step3/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ndw8l")
+
+[node name="Step4" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.70122, 0.401723, 0)
+mesh = SubResource("BoxMesh_woqci")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Step4"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Step4/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ndw8l")
+
+[node name="Step5" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.05596, 0.609707, 0)
+mesh = SubResource("BoxMesh_woqci")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Step5"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Step5/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_ndw8l")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 19.35426, 10.139247, -74.677376)
+collision_mask = 3
+script = ExtResource("6_ndw8l")
+world_environment_path = NodePath("../WorldEnvironment")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("CylinderShape3D_t54pj")

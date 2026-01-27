@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="SkyPhaseSettings" load_steps=2 format=3 uid="uid://tfgp5aluty1u"]
+
+[ext_resource type="Script" uid="uid://cjlm4d0eblua4" path="res://MSH_Skybox/Scripts/PhaseLightSettings.gd" id="1_wtr4s"]
+
+[resource]
+script = ExtResource("1_wtr4s")
+sun_color = Color(0.8, 0.32000002, 0, 1)
+sun_intensity = 0.5
+sun_angle_degrees = 5.0
+moon_intensity = 0.0
+ambient_energy = 0.6
+metadata/_custom_type_script = "uid://cjlm4d0eblua4"

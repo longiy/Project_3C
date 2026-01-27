@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bw470a45e5256"]
+
+[ext_resource type="Shader" uid="uid://boxgyu7wgrl2l" path="res://Shaders/Water.gdshader" id="1_lnpt3"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_lnpt3")
+shader_parameter/shallow_color = Color(0, 0.770786, 0.935831, 1)
+shader_parameter/deep_color = Color(0.0431373, 0.494118, 0.596078, 1)
+shader_parameter/depth_fade_distance = 2.0
+shader_parameter/fresnel_power = 2.0
+shader_parameter/min_alpha = 0.1
+shader_parameter/max_alpha = 0.9

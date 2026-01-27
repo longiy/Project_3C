@@ -1,0 +1,53 @@
+[gd_resource type="Compositor" load_steps=11 format=3 uid="uid://bcyp2ypwknqlp"]
+
+[ext_resource type="Script" uid="uid://bmjf2py6i727" path="res://_MUSHI/Sanity/CompositorEffects/sanity.gd" id="1_dilvj"]
+[ext_resource type="Script" uid="uid://ooefd1f8bv0t" path="res://_MUSHI/Sanity/CompositorEffects/kuwahara.gd" id="2_mqqor"]
+
+[sub_resource type="Curve" id="Curve_e1iut"]
+_data = [Vector2(0, 0), 0.0, 0.0, 1, 0, Vector2(1, 1), 2.0, 0.0, 0, 1]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_72pxn"]
+curve = SubResource("Curve_e1iut")
+
+[sub_resource type="Gradient" id="Gradient_0hv06"]
+colors = PackedColorArray(0, 0, 0, 0, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_w4obd"]
+gradient = SubResource("Gradient_0hv06")
+
+[sub_resource type="Gradient" id="Gradient_pwa5r"]
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bvppr"]
+gradient = SubResource("Gradient_pwa5r")
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_lfvwo"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("1_dilvj")
+sanity_level = 1.0
+vignette_gradient = SubResource("GradientTexture1D_bvppr")
+fog_start = 0.0
+fog_end = 65.517
+fog_gradient = SubResource("GradientTexture1D_w4obd")
+fog_curve = SubResource("CurveTexture_72pxn")
+metadata/_custom_type_script = "uid://bmjf2py6i727"
+
+[sub_resource type="CompositorEffect" id="CompositorEffect_72pxn"]
+resource_local_to_scene = false
+resource_name = ""
+enabled = true
+effect_callback_type = 4
+needs_motion_vectors = false
+needs_normal_roughness = false
+script = ExtResource("2_mqqor")
+radius = 10.0
+metadata/_custom_type_script = "uid://ooefd1f8bv0t"
+
+[resource]
+compositor_effects = Array[CompositorEffect]([SubResource("CompositorEffect_lfvwo"), SubResource("CompositorEffect_72pxn")])

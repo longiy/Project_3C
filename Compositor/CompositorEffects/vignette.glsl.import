@@ -1,0 +1,14 @@
+[remap]
+
+importer="glsl"
+type="RDShaderFile"
+uid="uid://2cy4prqpwvvs"
+path="res://.godot/imported/vignette.glsl-92a3471d4fb97a7d679ec69aadacfaeb.res"
+
+[deps]
+
+source_file="res://Compositor/CompositorEffects/vignette.glsl"
+dest_files=["res://.godot/imported/vignette.glsl-92a3471d4fb97a7d679ec69aadacfaeb.res"]
+
+[params]
+

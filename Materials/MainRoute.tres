@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bhuo8n82p4yc1"]
+
+[ext_resource type="Shader" uid="uid://cqqdbx3bj1twq" path="res://Shaders/LandscapePBR.gdshader" id="1_pgi27"]
+[ext_resource type="Texture2D" uid="uid://pa587i8qc3cj" path="res://Textures/grid_1024x1024/grid_black_1024x1024.png" id="2_pgi27"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_pgi27")
+shader_parameter/top_color = Color(0.829195, 0.940044, 0.541679, 1)
+shader_parameter/bottom_color = Color(0.5858, 0.576424, 0.432308, 1)
+shader_parameter/side_color = Color(0.682243, 0.76509, 0.761465, 1)
+shader_parameter/threshold = 0.794
+shader_parameter/use_world_space = true
+shader_parameter/world_texture = ExtResource("2_pgi27")
+shader_parameter/world_texture_scale = 1.0
+shader_parameter/texture_overlay_factor = 1.0
+shader_parameter/use_additive_texture = true

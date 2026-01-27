@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" load_steps=4 format=3 uid="uid://o1meo6liygcg"]
+
+[ext_resource type="Shader" uid="uid://cr8vqentfscln" path="res://Shaders/ToonShadowTexture.gdshader" id="1_prsru"]
+[ext_resource type="Texture2D" uid="uid://2jfvg2rl1i31" path="res://Textures/grid_1024x1024/grid_lime_1024x1024.png" id="2_t1abw"]
+[ext_resource type="Texture2D" uid="uid://bb6w4hhv1d2jd" path="res://Textures/grid_1024x1024/grid_blue_1024x1024.png" id="3_8y1x4"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_prsru")
+shader_parameter/albedo_texture = ExtResource("2_t1abw")
+shader_parameter/shadow_texture = ExtResource("3_8y1x4")
+shader_parameter/shadow_threshold = 0.3
+shader_parameter/specular_threshold = 0.7
+shader_parameter/specular_strenght = 0.5
+shader_parameter/highlight_threshold = 1.0
+shader_parameter/only_colored_specular = true

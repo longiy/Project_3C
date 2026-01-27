@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bkj4vfc75a3ct"]
+
+[ext_resource type="Shader" uid="uid://cqqdbx3bj1twq" path="res://Shaders/LandscapePBR.gdshader" id="1_op5kf"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_op5kf")
+shader_parameter/top_color = Color(1, 1, 1, 1)
+shader_parameter/bottom_color = Color(0.268901, 0.50573, 0.664385, 1)
+shader_parameter/side_color = Color(0.682243, 0.76509, 0.761465, 1)
+shader_parameter/threshold = 0.685
+shader_parameter/use_world_space = true
+shader_parameter/world_texture_scale = 1.0
+shader_parameter/texture_overlay_factor = 0.5
+shader_parameter/use_additive_texture = false

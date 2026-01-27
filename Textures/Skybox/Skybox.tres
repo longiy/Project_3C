@@ -1,0 +1,29 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=3 uid="uid://b8bwbnh4qema3"]
+
+[ext_resource type="Shader" uid="uid://cwprrcdey828w" path="res://Textures/Skybox/Skybox.gdshader" id="1_ob1m6"]
+[ext_resource type="Texture2D" uid="uid://cueldmmfv1dlp" path="res://Textures/Skybox/Clouds.png" id="2_3vba3"]
+
+[sub_resource type="Gradient" id="Gradient_0tafn"]
+offsets = PackedFloat32Array(0.00584416, 0.99026)
+colors = PackedColorArray(0.331802, 0.73421, 0.859766, 1, 0.194774, 0.416653, 0.537164, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_5p6pf"]
+gradient = SubResource("Gradient_0tafn")
+
+[sub_resource type="Gradient" id="Gradient_3vba3"]
+offsets = PackedFloat32Array(0, 0.529221)
+colors = PackedColorArray(0.13079, 0.250839, 0.382602, 1, 0.568431, 0.795921, 0.905933, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_rtgf4"]
+gradient = SubResource("Gradient_3vba3")
+
+[resource]
+shader = ExtResource("1_ob1m6")
+shader_parameter/hdri_gradient = SubResource("GradientTexture1D_5p6pf")
+shader_parameter/hdri_gradient_lighting_exposure = 1.0
+shader_parameter/hdri_gradient_visual_exposure = 1.0
+shader_parameter/sky_gradient = SubResource("GradientTexture1D_rtgf4")
+shader_parameter/clouds = ExtResource("2_3vba3")
+shader_parameter/cloud_color = Color(0.431663, 0.663264, 0.763711, 1)
+shader_parameter/cloud_speed = 0.01
+shader_parameter/exposure = 1.0

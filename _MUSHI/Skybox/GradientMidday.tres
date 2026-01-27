@@ -1,0 +1,11 @@
+[gd_resource type="GradientTexture2D" load_steps=2 format=3 uid="uid://c0n7i526w8x7s"]
+
+[sub_resource type="Gradient" id="Gradient_woqci"]
+offsets = PackedFloat32Array(0.28613862, 0.5871287, 0.78910893, 1)
+colors = PackedColorArray(0.38093287, 0.6634363, 1, 1, 2.695322e-06, 0.70425755, 0.7631247, 1, 0.02897351, 0.61004734, 0.68071955, 1, 0.100485675, 0.37749687, 0.47730893, 1)
+
+[resource]
+gradient = SubResource("Gradient_woqci")
+fill_from = Vector2(0.5, 0)
+fill_to = Vector2(0.5, 1)
+metadata/_snap_enabled = true
