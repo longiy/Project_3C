@@ -89,8 +89,21 @@ target_visualization = NodePath("../../CameraLeadTarget")
 movement_system = NodePath("../../../../MovementSystem")
 
 [node name="NavigationCoordinator" parent="CCCPorter" index="4" node_paths=PackedStringArray("camera", "character_body")]
+process_mode = 4
 camera = NodePath("../CameraSystem/SpringArm3D/CameraRig/Camera3D")
 character_body = NodePath("../CharacterBody3D")
+
+[node name="NavigationCore" parent="CCCPorter/NavigationCoordinator" index="0"]
+process_mode = 4
+
+[node name="ClickDetector" parent="CCCPorter/NavigationCoordinator" index="1"]
+process_mode = 4
+
+[node name="CursorVisual" parent="CCCPorter/NavigationCoordinator" index="2"]
+process_mode = 4
+
+[node name="MarkerManager" parent="CCCPorter/NavigationCoordinator" index="3"]
+process_mode = 4
 
 [node name="MovementSystem" parent="CCCPorter" index="5" node_paths=PackedStringArray("character_body", "camera_pivot")]
 script = ExtResource("6_t54pj")

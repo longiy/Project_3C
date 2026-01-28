@@ -10,7 +10,7 @@ class_name CharacterController
 @export var camera_system: CameraSystem
 @export var input_coordinator: InputCoordinator
 @export var movement_system: MovementSystem
-@export var navigation_coordinator: NavigationCoordinator
+#@export var navigation_coordinator: NavigationCoordinator
 
 func _ready():
 	initialize_character_controller()
@@ -35,8 +35,8 @@ func initialize_character_controller():
 func _process(delta):
 	var input_state = input_coordinator.get_input_state() if input_coordinator else InputState.new()
 	
-	if navigation_coordinator:
-		navigation_coordinator.process_navigation(input_state, delta)
+	#if navigation_coordinator:
+		#navigation_coordinator.process_navigation(input_state, delta)
 	if movement_system:
 		movement_system.process_movement(input_state, delta)
 	if camera_system:	
@@ -44,17 +44,17 @@ func _process(delta):
 	if input_coordinator:
 		input_coordinator.process_input_reactions(input_state)
 
-# === NAVIGATION CONVENIENCE METHODS ===
-func set_navigation_target(target: Vector3):
-	if navigation_coordinator and navigation_coordinator.navigation_core:
-		navigation_coordinator.navigation_core.set_target(target)
-
-func cancel_navigation():
-	if navigation_coordinator:
-		navigation_coordinator.cancel_navigation()
-
-func is_navigation_active() -> bool:
-	return navigation_coordinator and navigation_coordinator.is_navigation_active()
+## === NAVIGATION CONVENIENCE METHODS ===
+#func set_navigation_target(target: Vector3):
+	#if navigation_coordinator and navigation_coordinator.navigation_core:
+		#navigation_coordinator.navigation_core.set_target(target)
+#
+#func cancel_navigation():
+	#if navigation_coordinator:
+		#navigation_coordinator.cancel_navigation()
+#
+#func is_navigation_active() -> bool:
+	#return navigation_coordinator and navigation_coordinator.is_navigation_active()
 
 # === UTILITY METHODS ===
 func get_character_position() -> Vector3:

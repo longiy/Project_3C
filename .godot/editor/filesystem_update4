@@ -1,4 +1,5 @@
-res://Assets/Environment/mushi_map_v_2.tscn
+res://Scenes/SCENE_ENVIRO.tscn
 res://Assets/Porter/PorterTreeMain.tres
 res://Shaders/LandscapePBR.gdshader
-res://Scenes/SCENE_ENVIRO.tscn
+res://Scripts/Character/CharacterController.gd
+res://Scenes/CCC_porter.tscn

@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://fvx54iskoapx"]
+[gd_scene load_steps=13 format=3 uid="uid://fvx54iskoapx"]
 
 [ext_resource type="Script" uid="uid://d3c3d101qoirc" path="res://Scripts/Character/CharacterController.gd" id="1_d6jmh"]
 [ext_resource type="Script" uid="uid://dkck14xrr3k1x" path="res://Scripts/Camera/CameraSystem.gd" id="1_nfwqg"]
@@ -8,12 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://dhfpmbmq55xqo" path="res://Assets/Porter/PorterMain.tscn" id="5_ie3xu"]
 [ext_resource type="Script" uid="uid://dga1kxck5v62n" path="res://Scripts/Control/InputCoordinator.gd" id="6_uj5ul"]
 [ext_resource type="Resource" uid="uid://ba6hbu0x8bufx" path="res://Scripts/Control/InputConfig_A.tres" id="7_ws850"]
-[ext_resource type="Script" uid="uid://7lrw8qux87bl" path="res://Scripts/Navigation/NavigationCoordinator.gd" id="8_n6fqm"]
-[ext_resource type="Resource" uid="uid://dnbwhd8mk0n7k" path="res://Scripts/Navigation/NavigationConfig_A.tres" id="9_b4r38"]
-[ext_resource type="Script" uid="uid://d0ic6m25rk78n" path="res://Scripts/Navigation/NavigationCore.gd" id="10_cgew1"]
-[ext_resource type="Script" uid="uid://dmbi7feffstd1" path="res://Scripts/Navigation/ClickDetector.gd" id="11_gnfu4"]
-[ext_resource type="Script" uid="uid://dyh1c65tt6ho4" path="res://Scripts/Navigation/CursorVisual.gd" id="12_th6i8"]
-[ext_resource type="Script" uid="uid://dsn1psl1da4sg" path="res://Scripts/Navigation/MarkerManager.gd" id="13_t7cp7"]
 [ext_resource type="Script" uid="uid://dib1jwwb3fxyn" path="res://Scripts/Character/MovementDebugVisualizer.gd" id="14_vfsic"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_wa4a6"]
@@ -26,12 +20,11 @@ radius = 0.1
 radius = 0.2
 height = 1.70464
 
-[node name="CccPorter" type="Node3D" node_paths=PackedStringArray("character_body", "camera_system", "input_coordinator", "navigation_coordinator")]
+[node name="CccPorter" type="Node3D" node_paths=PackedStringArray("character_body", "camera_system", "input_coordinator")]
 script = ExtResource("1_d6jmh")
 character_body = NodePath("CharacterBody3D")
 camera_system = NodePath("CameraSystem")
 input_coordinator = NodePath("InputCoordinator")
-navigation_coordinator = NodePath("NavigationCoordinator")
 
 [node name="CameraLeadTarget" type="MeshInstance3D" parent="."]
 visible = false
@@ -83,26 +76,6 @@ shape = SubResource("CapsuleShape3D_5wxtv")
 [node name="InputCoordinator" type="Node" parent="."]
 script = ExtResource("6_uj5ul")
 input_config = ExtResource("7_ws850")
-
-[node name="NavigationCoordinator" type="Node" parent="." node_paths=PackedStringArray("navigation_core", "click_detector", "cursor_visual", "marker_manager")]
-script = ExtResource("8_n6fqm")
-navigation_config = ExtResource("9_b4r38")
-navigation_core = NodePath("NavigationCore")
-click_detector = NodePath("ClickDetector")
-cursor_visual = NodePath("CursorVisual")
-marker_manager = NodePath("MarkerManager")
-
-[node name="NavigationCore" type="Node" parent="NavigationCoordinator"]
-script = ExtResource("10_cgew1")
-
-[node name="ClickDetector" type="Node" parent="NavigationCoordinator"]
-script = ExtResource("11_gnfu4")
-
-[node name="CursorVisual" type="Node" parent="NavigationCoordinator"]
-script = ExtResource("12_th6i8")
-
-[node name="MarkerManager" type="Node" parent="NavigationCoordinator"]
-script = ExtResource("13_t7cp7")
 
 [node name="MovementSystem" type="Node" parent="."]
 
