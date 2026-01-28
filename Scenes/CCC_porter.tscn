@@ -5,7 +5,7 @@
 [ext_resource type="Script" uid="uid://dvoxu6frkwrwi" path="res://Scripts/Camera/CameraDelay.gd" id="2_d6jmh"]
 [ext_resource type="Script" uid="uid://thel4dd2jygm" path="res://Scripts/Camera/CameraZoom.gd" id="3_7ehud"]
 [ext_resource type="Script" uid="uid://dkqykiqarykxi" path="res://Scripts/Camera/CameraRotaion.gd" id="4_q20ws"]
-[ext_resource type="PackedScene" uid="uid://dhfpmbmq55xqo" path="res://_MUSHI/Porter/PorterMain.tscn" id="5_ie3xu"]
+[ext_resource type="PackedScene" uid="uid://dhfpmbmq55xqo" path="res://Assets/Porter/PorterMain.tscn" id="5_ie3xu"]
 [ext_resource type="Script" uid="uid://dga1kxck5v62n" path="res://Scripts/Control/InputCoordinator.gd" id="6_uj5ul"]
 [ext_resource type="Resource" uid="uid://ba6hbu0x8bufx" path="res://Scripts/Control/InputConfig_A.tres" id="7_ws850"]
 [ext_resource type="Script" uid="uid://7lrw8qux87bl" path="res://Scripts/Navigation/NavigationCoordinator.gd" id="8_n6fqm"]
