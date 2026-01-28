@@ -17,8 +17,11 @@ var is_horizontal_smoothing: bool = false
 # VERTICAL DELAY SYSTEM (SIMPLIFIED)
 # ============================================================================
 
+# === VERTICAL DELAY SYSTEM ===
 @export_group("Vertical Following")
-@export var vertical_delay_time: float = 0.5     # Distance where smoothing becomes zero
+@export var vertical_delay_time: float = 0.5
+@export var vertical_deadzone: float = 0.0  # NEW - set to 0.5 for medium deadzone
+@export var vertical_deadzone_exit_speed: float = 2.0  # NEW - how fast camera moves when exiting deadzone
 
 # === VERTICAL STATE ===
 var current_vertical: float = 0.0
@@ -125,19 +128,43 @@ func process_horizontal_delay(target_position: Vector3, delta: float):
 # VERTICAL DELAY IMPLEMENTATION (NEW SIMPLIFIED)
 # ============================================================================
 
+
 func process_vertical_delay(target_position: Vector3, delta: float):
 	current_vertical = smoothed_position.y
 	
-	# Always smooth with time-based delay only
-	if vertical_delay_time > 0:
+	# Calculate vertical distance from camera to target
+	var vertical_distance = target_position.y - current_vertical
+	
+	# Apply deadzone gating
+	if vertical_deadzone > 0:
+		# Character is within deadzone - don't move camera
+		if abs(vertical_distance) <= vertical_deadzone:
+			is_vertical_smoothing = false
+			smoothed_position.y = current_vertical
+			return
+		
+		# Character exceeded deadzone - move camera
+		# Subtract deadzone from distance so movement starts from zone edge
+		var distance_outside_zone = abs(vertical_distance) - vertical_deadzone
+		var direction = sign(vertical_distance)
+		var target_outside_zone = current_vertical + (direction * distance_outside_zone)
+		
+		# Smooth movement toward edge of deadzone
 		var lerp_factor = 1.0 - exp(-delta / vertical_delay_time)
-		current_vertical = lerp(current_vertical, target_position.y, lerp_factor)
-		is_vertical_smoothing = current_vertical != target_position.y
+		current_vertical = lerp(current_vertical, target_outside_zone, lerp_factor)
+		is_vertical_smoothing = true
 	else:
-		current_vertical = target_position.y
-		is_vertical_smoothing = false
+		# Original behavior - no deadzone, smooth to target
+		if vertical_delay_time > 0:
+			var lerp_factor = 1.0 - exp(-delta / vertical_delay_time)
+			current_vertical = lerp(current_vertical, target_position.y, lerp_factor)
+			is_vertical_smoothing = current_vertical != target_position.y
+		else:
+			current_vertical = target_position.y
+			is_vertical_smoothing = false
 	
 	smoothed_position.y = current_vertical
+
 
 
 # ============================================================================

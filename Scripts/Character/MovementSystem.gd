@@ -108,13 +108,7 @@ func calculate_hybrid_ground_movement(input_state: InputState, delta: float):
 		# Get movement direction - camera-relative with optional alignment
 		var input_direction: Vector2
 		
-		if movement_config.camera_align_on_movement and input_state.walk_pressed:
-			input_direction = get_camera_relative_movement(final_movement) if not input_state.is_navigating else final_movement
-			if not camera_align_triggered:
-				camera_align_triggered = true
-				determine_and_lock_alignment_mode()
-		else:
-			input_direction = get_camera_relative_movement(final_movement) if not input_state.is_navigating else final_movement
+		input_direction = get_camera_relative_movement(final_movement) if not input_state.is_navigating else final_movement
 		
 		# Check if we're maintaining momentum
 		if previous_input_direction.length() > 0.1:

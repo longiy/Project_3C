@@ -1,10 +1,13 @@
-[gd_scene load_steps=12 format=3 uid="uid://c7lyd0ltxwa8"]
+[gd_scene load_steps=17 format=3 uid="uid://c7lyd0ltxwa8"]
 
 [ext_resource type="Sky" uid="uid://boe6kl55ojwal" path="res://_MUSHI/Skybox/SkyboxMaster.tres" id="1_endwm"]
 [ext_resource type="Compositor" uid="uid://bcyp2ypwknqlp" path="res://_MUSHI/Sanity/SanityCompositor.tres" id="2_endwm"]
-[ext_resource type="PackedScene" uid="uid://diueuwbtv4w82" path="res://Scenes/CCC.tscn" id="3_woqci"]
 [ext_resource type="PackedScene" uid="uid://osh7lqk4p408" path="res://Assets/Environment/mushi_map_v_2.tscn" id="4_endwm"]
+[ext_resource type="PackedScene" uid="uid://fvx54iskoapx" path="res://Scenes/CCC_porter.tscn" id="5_woqci"]
+[ext_resource type="Script" uid="uid://dtxx8xlsewsfv" path="res://Scripts/Control/InputConfig.gd" id="6_n8s0r"]
 [ext_resource type="Script" uid="uid://whkbn12eoeed" path="res://_MUSHI/Sanity/SanityTrigger.gd" id="6_ndw8l"]
+[ext_resource type="Script" uid="uid://bh16mnck8a2vm" path="res://Scripts/Character/MovementSystem.gd" id="6_t54pj"]
+[ext_resource type="Script" uid="uid://bkv8he7g4u73k" path="res://Scripts/Character/MovementConfig.gd" id="7_n8s0r"]
 
 [sub_resource type="Environment" id="Environment_w862e"]
 background_mode = 2
@@ -42,6 +45,14 @@ data = PackedVector3Array(-0.5, 0.1, 0.5, 0.5, 0.1, 0.5, -0.5, -0.1, 0.5, 0.5, 0
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_t54pj"]
 radius = 2.2436523
+
+[sub_resource type="Resource" id="Resource_37vtp"]
+script = ExtResource("6_n8s0r")
+metadata/_custom_type_script = "uid://dtxx8xlsewsfv"
+
+[sub_resource type="Resource" id="Resource_t54pj"]
+script = ExtResource("7_n8s0r")
+metadata/_custom_type_script = "uid://bkv8he7g4u73k"
 
 [node name="Scene" type="Node3D"]
 
@@ -83,9 +94,6 @@ spot_angle = 43.9079
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.92327, 140.643, -170.784)
 mesh = SubResource("BoxMesh_endwm")
-
-[node name="CCC" parent="." groups=["player"] instance=ExtResource("3_woqci")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.2802, 9.86112, -77.4471)
 
 [node name="Step" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.78027, -0.221892, 0)
@@ -140,3 +148,53 @@ world_environment_path = NodePath("../WorldEnvironment")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
 shape = SubResource("CylinderShape3D_t54pj")
+
+[node name="CCCPorter" parent="." node_paths=PackedStringArray("movement_system") instance=ExtResource("5_woqci")]
+input_config = SubResource("Resource_37vtp")
+movement_system = NodePath("MovementSystem")
+
+[node name="CameraSystem" parent="CCCPorter" index="1" node_paths=PackedStringArray("target_object")]
+target_object = NodePath("../CharacterBody3D")
+
+[node name="CameraDelay" parent="CCCPorter/CameraSystem" index="0" node_paths=PackedStringArray("target_visualization")]
+target_visualization = NodePath("../../CameraLeadTarget")
+
+[node name="Skeleton3D" parent="CCCPorter/CharacterBody3D/PorterMain/Porter/rig" index="0"]
+bones/22/position = Vector3(0.15951502, 1.345619, -0.027196702)
+bones/22/rotation = Quaternion(-0.11042042, -0.3364147, 0.9110325, -0.21131104)
+bones/22/scale = Vector3(1.0140465, 0.97248816, 1.0140464)
+bones/23/rotation = Quaternion(4.7390852e-08, -0.013654599, -1.3146319e-08, 0.9999068)
+bones/23/scale = Vector3(1.0000001, 1.0000002, 1)
+bones/24/rotation = Quaternion(0.93518925, -0.013260559, 0.03602229, 0.35206196)
+bones/24/scale = Vector3(1.0030628, 0.9763948, 1.0219272)
+bones/25/rotation = Quaternion(2.1527509e-09, -0.11444096, -3.215689e-08, 0.9934301)
+bones/25/scale = Vector3(1, 0.9999997, 0.9999999)
+bones/26/rotation = Quaternion(0.34613994, -0.11146837, -0.19907136, 0.9100179)
+bones/26/scale = Vector3(0.99307173, 1.0076526, 1.0009775)
+bones/28/position = Vector3(-0.15951507, 1.3456188, -0.027196623)
+bones/28/rotation = Quaternion(0.11042032, -0.3364149, 0.9110325, 0.21131092)
+bones/28/scale = Vector3(1.0140463, 0.9724886, 1.0140461)
+bones/29/rotation = Quaternion(7.496584e-09, 0.013654747, -8.528201e-08, 0.9999068)
+bones/29/scale = Vector3(0.99999994, 1.0000004, 0.99999976)
+bones/30/rotation = Quaternion(0.93518937, 0.013260676, -0.036022026, 0.3520619)
+bones/30/scale = Vector3(1.0030636, 0.9763938, 1.0219276)
+bones/31/rotation = Quaternion(-4.995112e-07, 0.11444085, 2.3611506e-07, 0.9934301)
+bones/31/scale = Vector3(1.0000002, 0.9999991, 1.0000002)
+bones/32/rotation = Quaternion(0.3461405, 0.111468054, 0.19907144, 0.9100177)
+bones/32/scale = Vector3(0.9930716, 1.0076529, 1.0009776)
+
+[node name="AnimationTree" parent="CCCPorter/CharacterBody3D/PorterMain/Porter" index="1" node_paths=PackedStringArray("movement_system")]
+movement_system = NodePath("../../../../MovementSystem")
+
+[node name="NavigationCoordinator" parent="CCCPorter" index="4" node_paths=PackedStringArray("camera", "character_body")]
+camera = NodePath("../CameraSystem/SpringArm3D/CameraRig/Camera3D")
+character_body = NodePath("../CharacterBody3D")
+
+[node name="MovementSystem" parent="CCCPorter" index="5" node_paths=PackedStringArray("character_body", "camera_pivot")]
+script = ExtResource("6_t54pj")
+movement_config = SubResource("Resource_t54pj")
+character_body = NodePath("../CharacterBody3D")
+camera_pivot = NodePath("../CameraSystem/SpringArm3D/CameraRig/Camera3D")
+
+[editable path="CCCPorter"]
+[editable path="CCCPorter/CharacterBody3D/PorterMain"]

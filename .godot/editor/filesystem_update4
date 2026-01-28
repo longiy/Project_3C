@@ -1,0 +1,12 @@
+res://Scenes/CCC_porter.tscn
+res://_MUSHI/Skybox/GradientAfternoon.tres
+res://_MUSHI/Skybox/GradientEvening.tres
+res://_MUSHI/Skybox/GradientMidday.tres
+res://_MUSHI/Skybox/GradientMorning.tres
+res://_MUSHI/Skybox/GradientNight.tres
+res://_MUSHI/Skybox/SkyboxMaster.tres
+res://_MUSHI/Sanity/SanityCompositor.tres
+res://Assets/PorterTreeMain.tres
+res://Scenes/SCENE_ENVIRO.tscn
+res://Scripts/Character/MovementSystem.gd
+res://Scripts/Character/MovementConfig.gd

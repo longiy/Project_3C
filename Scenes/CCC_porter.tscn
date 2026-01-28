@@ -1,0 +1,129 @@
+[gd_scene load_steps=20 format=3 uid="uid://fvx54iskoapx"]
+
+[ext_resource type="Script" uid="uid://d3c3d101qoirc" path="res://Scripts/Character/CharacterController.gd" id="1_d6jmh"]
+[ext_resource type="Script" uid="uid://dkck14xrr3k1x" path="res://Scripts/Camera/CameraSystem.gd" id="1_nfwqg"]
+[ext_resource type="Script" uid="uid://dvoxu6frkwrwi" path="res://Scripts/Camera/CameraDelay.gd" id="2_d6jmh"]
+[ext_resource type="Script" uid="uid://thel4dd2jygm" path="res://Scripts/Camera/CameraZoom.gd" id="3_7ehud"]
+[ext_resource type="Script" uid="uid://dkqykiqarykxi" path="res://Scripts/Camera/CameraRotaion.gd" id="4_q20ws"]
+[ext_resource type="PackedScene" uid="uid://dhfpmbmq55xqo" path="res://_MUSHI/Porter/PorterMain.tscn" id="5_ie3xu"]
+[ext_resource type="Script" uid="uid://dga1kxck5v62n" path="res://Scripts/Control/InputCoordinator.gd" id="6_uj5ul"]
+[ext_resource type="Resource" uid="uid://ba6hbu0x8bufx" path="res://Scripts/Control/InputConfig_A.tres" id="7_ws850"]
+[ext_resource type="Script" uid="uid://7lrw8qux87bl" path="res://Scripts/Navigation/NavigationCoordinator.gd" id="8_n6fqm"]
+[ext_resource type="Resource" uid="uid://dnbwhd8mk0n7k" path="res://Scripts/Navigation/NavigationConfig_A.tres" id="9_b4r38"]
+[ext_resource type="Script" uid="uid://d0ic6m25rk78n" path="res://Scripts/Navigation/NavigationCore.gd" id="10_cgew1"]
+[ext_resource type="Script" uid="uid://dmbi7feffstd1" path="res://Scripts/Navigation/ClickDetector.gd" id="11_gnfu4"]
+[ext_resource type="Script" uid="uid://dyh1c65tt6ho4" path="res://Scripts/Navigation/CursorVisual.gd" id="12_th6i8"]
+[ext_resource type="Script" uid="uid://dsn1psl1da4sg" path="res://Scripts/Navigation/MarkerManager.gd" id="13_t7cp7"]
+[ext_resource type="Script" uid="uid://dib1jwwb3fxyn" path="res://Scripts/Character/MovementDebugVisualizer.gd" id="14_vfsic"]
+
+[sub_resource type="PrismMesh" id="PrismMesh_wa4a6"]
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_12gup"]
+radius = 0.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_lql46"]
+top_radius = 0.01
+bottom_radius = 0.01
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5wxtv"]
+radius = 0.2
+height = 1.70464
+
+[node name="CccPorter" type="Node3D" node_paths=PackedStringArray("character_body", "camera_system", "input_coordinator", "navigation_coordinator")]
+script = ExtResource("1_d6jmh")
+character_body = NodePath("CharacterBody3D")
+camera_system = NodePath("CameraSystem")
+input_coordinator = NodePath("InputCoordinator")
+navigation_coordinator = NodePath("NavigationCoordinator")
+
+[node name="CameraLeadTarget" type="MeshInstance3D" parent="."]
+visible = false
+mesh = SubResource("PrismMesh_wa4a6")
+skeleton = NodePath("../CameraSystem")
+
+[node name="CameraSystem" type="Node3D" parent="." node_paths=PackedStringArray("delay_system", "zoom_system", "rotation_system", "spring_arm", "camera")]
+script = ExtResource("1_nfwqg")
+delay_system = NodePath("CameraDelay")
+zoom_system = NodePath("CameraZoom")
+rotation_system = NodePath("CameraRotation")
+spring_arm = NodePath("SpringArm3D")
+camera = NodePath("SpringArm3D/CameraRig/Camera3D")
+camera_height_offset = 0.0
+camera_distance_offset = 3.0
+
+[node name="CameraDelay" type="Node" parent="CameraSystem"]
+script = ExtResource("2_d6jmh")
+vertical_deadzone = 1.0
+vertical_deadzone_exit_speed = 0.5
+
+[node name="CameraZoom" type="Node" parent="CameraSystem"]
+script = ExtResource("3_7ehud")
+
+[node name="CameraRotation" type="Node" parent="CameraSystem"]
+script = ExtResource("4_q20ws")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraSystem"]
+collision_mask = 2
+shape = SubResource("SphereShape3D_12gup")
+margin = 1.0
+
+[node name="CameraRig" type="Node3D" parent="CameraSystem/SpringArm3D"]
+
+[node name="Camera3D" type="Camera3D" parent="CameraSystem/SpringArm3D/CameraRig"]
+v_offset = 0.5
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="CameraSystem"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, 0)
+visible = false
+mesh = SubResource("CylinderMesh_lql46")
+skeleton = NodePath("../../CharacterBody3D")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." groups=["player"]]
+collision_layer = 3
+slide_on_ceiling = false
+floor_max_angle = 1.22173
+
+[node name="CapsuleCollider" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+shape = SubResource("CapsuleShape3D_5wxtv")
+
+[node name="PlaceholderStick" type="MeshInstance3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+visible = false
+mesh = SubResource("CylinderMesh_lql46")
+
+[node name="PorterMain" parent="CharacterBody3D" instance=ExtResource("5_ie3xu")]
+
+[node name="InputCoordinator" type="Node" parent="."]
+script = ExtResource("6_uj5ul")
+input_config = ExtResource("7_ws850")
+
+[node name="NavigationCoordinator" type="Node" parent="." node_paths=PackedStringArray("navigation_core", "click_detector", "cursor_visual", "marker_manager")]
+script = ExtResource("8_n6fqm")
+navigation_config = ExtResource("9_b4r38")
+navigation_core = NodePath("NavigationCore")
+click_detector = NodePath("ClickDetector")
+cursor_visual = NodePath("CursorVisual")
+marker_manager = NodePath("MarkerManager")
+
+[node name="NavigationCore" type="Node" parent="NavigationCoordinator"]
+script = ExtResource("10_cgew1")
+
+[node name="ClickDetector" type="Node" parent="NavigationCoordinator"]
+script = ExtResource("11_gnfu4")
+
+[node name="CursorVisual" type="Node" parent="NavigationCoordinator"]
+script = ExtResource("12_th6i8")
+
+[node name="MarkerManager" type="Node" parent="NavigationCoordinator"]
+script = ExtResource("13_t7cp7")
+
+[node name="MovementSystem" type="Node" parent="."]
+
+[node name="MovementDebugVisualizer" type="Node" parent="MovementSystem"]
+script = ExtResource("14_vfsic")
+enable_debug_vectors = true
+vector_height_offset = 2.0
+
+[editable path="CharacterBody3D/PorterMain"]
