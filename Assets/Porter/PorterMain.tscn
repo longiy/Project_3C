@@ -1,6 +1,6 @@
 [gd_scene load_steps=20 format=4 uid="uid://dhfpmbmq55xqo"]
 
-[ext_resource type="AnimationNodeStateMachine" uid="uid://bp8ya6gjo4sqx" path="res://Assets/PorterTreeMain.tres" id="1_0yto4"]
+[ext_resource type="AnimationNodeStateMachine" uid="uid://bp8ya6gjo4sqx" path="res://Assets/Porter/PorterTreeMain.tres" id="1_0yto4"]
 [ext_resource type="Script" uid="uid://i3i8kbbwjbh1" path="res://Scripts/Animation/AnimationController.gd" id="2_4t5fr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1sooa"]

@@ -1,7 +1,7 @@
 [gd_resource type="ShaderMaterial" load_steps=3 format=3 uid="uid://bhuo8n82p4yc1"]
 
 [ext_resource type="Shader" uid="uid://cqqdbx3bj1twq" path="res://Shaders/LandscapePBR.gdshader" id="1_pgi27"]
-[ext_resource type="Texture2D" uid="uid://pa587i8qc3cj" path="res://Textures/grid_1024x1024/grid_black_1024x1024.png" id="2_pgi27"]
+[ext_resource type="Texture2D" uid="uid://pa587i8qc3cj" path="res://Textures/grid_black_1024x1024.png" id="2_pgi27"]
 
 [resource]
 render_priority = 0
