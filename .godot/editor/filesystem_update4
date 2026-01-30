@@ -1,5 +1,9 @@
 res://Scenes/SCENE_ENVIRO.tscn
 res://Assets/Porter/PorterTreeMain.tres
 res://Shaders/LandscapePBR.gdshader
-res://Scripts/Character/CharacterController.gd
+res://Scripts/Camera/CameraSystem.gd
+res://Scripts/Camera/CameraDelay.gd
 res://Scenes/CCC_porter.tscn
+res://Scripts/Camera/CameraRotaion.gd
+res://Scripts/Control/InputConfig_A.tres
+res://Scripts/Character/MovementConfig.gd

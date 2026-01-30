@@ -8,7 +8,7 @@ class_name MovementConfig
 @export var sprint_speed: float = 6.3
 
 @export_group("Speed Transitions")
-@export var speed_transition_rate: float = 4.0
+@export var speed_transition_rate: float = 1
 
 @export_group("Movement Physics")
 @export var acceleration: float = 30.0

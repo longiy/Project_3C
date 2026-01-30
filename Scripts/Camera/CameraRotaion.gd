@@ -4,7 +4,7 @@ class_name CameraRotation
 
 # === ROTATION CONFIGURATION ===
 @export_group("Rotation Settings")
-@export var horizontal_smoothing: float = 12.0
+@export var horizontal_smoothing: float = 6
 @export var vertical_smoothing: float = 12.0
 @export var invert_horizontal: bool = false
 @export var invert_vertical: bool = false

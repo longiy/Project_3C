@@ -20,8 +20,8 @@ var is_horizontal_smoothing: bool = false
 # === VERTICAL DELAY SYSTEM ===
 @export_group("Vertical Following")
 @export var vertical_delay_time: float = 0.5
-@export var vertical_deadzone: float = 0.0  # NEW - set to 0.5 for medium deadzone
-@export var vertical_deadzone_exit_speed: float = 2.0  # NEW - how fast camera moves when exiting deadzone
+@export var vertical_deadzone: float = 0.5  
+@export var vertical_deadzone_exit_speed: float = 0.5 
 
 # === VERTICAL STATE ===
 var current_vertical: float = 0.0
@@ -30,18 +30,21 @@ var is_vertical_smoothing: bool = false
 # ============================================================================
 # CAMERA LEAD SYSTEM
 # ============================================================================
-
 @export_group("Camera Lead")
 @export var target_visualization: Node3D
 @export var enable_camera_lead: bool = true
 @export var camera_lead_distance: float = 1.5
 @export var persistent_lead: bool = true
-@export var lead_realignment_time: float = 0.5
+@export var max_movement_speed: float = 6.0
 
-# === LEAD STATE ===
+@export var lead_start_multiplier: float = 8.0  # Speed of lead response when moving
+@export var lead_end_multiplier: float = 3.0    # Speed of lead return when stopped
+
+# Lead state
 var current_lead_direction: Vector2 = Vector2.ZERO
-var last_movement_direction: Vector2 = Vector2.ZERO
-
+var current_lead_strength: float = 0.0
+var frozen_lead_strength: float = 0.0
+var is_stopping: bool = false
 # ============================================================================
 # SHARED CONFIGURATION
 # ============================================================================
@@ -74,7 +77,7 @@ func initialize(initial_position: Vector3, target: Node3D):
 	
 	# Initialize lead
 	current_lead_direction = Vector2.ZERO
-	last_movement_direction = Vector2.ZERO
+
 
 # ============================================================================
 # MAIN PROCESSING
@@ -99,7 +102,7 @@ func process_horizontal_delay(target_position: Vector3, delta: float):
 	current_horizontal = Vector3(smoothed_position.x, smoothed_position.y, smoothed_position.z)
 	
 	# Start with character position
-	var camera_target = Vector3(target_position.x, smoothed_position.y, target_position.z)
+	var camera_target = Vector3(target_position.x, target_position.y, target_position.z)
 	
 	# Apply camera lead FIRST to get final target
 	if enable_camera_lead:
@@ -172,38 +175,53 @@ func process_vertical_delay(target_position: Vector3, delta: float):
 # ============================================================================
 
 func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delta: float) -> Vector3:
-	# Update last direction if moving
-	if movement_direction.length() > movement_threshold:
-		last_movement_direction = movement_direction
+	if not enable_camera_lead:
+		if target_visualization:
+			target_visualization.global_position = camera_target
+		return camera_target
 	
-	# Choose target lead direction
-	var target_lead_direction = movement_direction
-	if persistent_lead and movement_direction.length() <= movement_threshold and last_movement_direction.length() > 0:
-		target_lead_direction = last_movement_direction
+	# Get current velocity magnitude
+	var current_speed = 0.0
+	if target_node and target_node.has_method("get_velocity"):
+		var velocity = target_node.get_velocity()
+		current_speed = Vector2(velocity.x, velocity.z).length()
 	
-	# Smoothly interpolate lead direction
-	if target_lead_direction.length() > movement_threshold:
-		if lead_realignment_time > 0:
-			var lead_lerp_factor = 1.0 - exp(-delta / lead_realignment_time)
-			current_lead_direction = current_lead_direction.lerp(target_lead_direction, lead_lerp_factor)
-		else:
-			current_lead_direction = target_lead_direction
-	elif not persistent_lead:
-		if lead_realignment_time > 0:
-			var lead_lerp_factor = 1.0 - exp(-delta / lead_realignment_time)
-			current_lead_direction = current_lead_direction.lerp(Vector2.ZERO, lead_lerp_factor)
-		else:
-			current_lead_direction = Vector2.ZERO
+	# Calculate target lead strength based on velocity (0-1 normalized)
+	var target_lead_strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
 	
-	# Apply lead offset
-	if current_lead_direction.length() > 0.01:
-		var direction_offset = Vector3(current_lead_direction.x, 0, current_lead_direction.y) * camera_lead_distance
-		camera_target += direction_offset
+	# Determine if moving or stopped
+	var is_moving = movement_direction.length() > movement_threshold
+	
+	if is_moving:
+		# MOVING STATE
+		is_stopping = false
 		
-	# Update visualization if present
+		# Lerp strength and direction toward target
+		var lerp_speed = lead_start_multiplier * delta
+		current_lead_strength = lerp(current_lead_strength, target_lead_strength, lerp_speed)
+		current_lead_direction = current_lead_direction.lerp(movement_direction, lerp_speed)
+	
+	elif not persistent_lead:
+		# STOPPED STATE
+		if not is_stopping:
+			is_stopping = true
+			frozen_lead_strength = current_lead_strength
+		
+		# Lerp back to zero
+		var lerp_speed = lead_end_multiplier * delta
+		current_lead_direction = current_lead_direction.lerp(Vector2.ZERO, lerp_speed)
+		current_lead_strength = lerp(current_lead_strength, 0.0, lerp_speed)
+	
+	# Apply lead offset using direction * strength
+	if current_lead_direction.length() > 0.01 and current_lead_strength > 0.01:
+		var direction_offset = Vector3(current_lead_direction.x, 0, current_lead_direction.y)
+		direction_offset *= camera_lead_distance * current_lead_strength
+		camera_target += direction_offset
+	
+	# Update visualization
 	if target_visualization:
 		target_visualization.global_position = camera_target
-		
+	
 	return camera_target
 
 # ============================================================================
@@ -241,17 +259,12 @@ func set_vertical_delay_time(new_time: float):
 	vertical_delay_time = new_time
 
 # === LEAD SETTERS ===
-func set_direction_bias(enabled: bool, strength: float):
-	enable_camera_lead = enabled
-	camera_lead_distance = strength
+func set_lead_multipliers(start_mult: float, end_mult: float):
+	lead_start_multiplier = start_mult
+	lead_end_multiplier = end_mult
 
-func set_lead_realignment_time(time: float):
-	lead_realignment_time = time
-
-func set_persistent_lead(enabled: bool):
-	persistent_lead = enabled
-	if not enabled:
-		last_movement_direction = Vector2.ZERO
+func set_max_movement_speed(speed: float):
+	max_movement_speed = speed
 
 # ============================================================================
 # STATUS QUERIES

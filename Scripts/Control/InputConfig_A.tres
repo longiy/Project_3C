@@ -1,19 +1,8 @@
-[gd_resource type="Resource" script_class="InputConfig" load_steps=2 format=3 uid="uid://ba6hbu0x8bufx"]
+[gd_resource type="Resource" script_class="InputConfig" format=3 uid="uid://ba6hbu0x8bufx"]
 
 [ext_resource type="Script" uid="uid://dtxx8xlsewsfv" path="res://Scripts/Control/InputConfig.gd" id="1_cvw68"]
 
 [resource]
 script = ExtResource("1_cvw68")
-mouse_sensitivity = Vector2(0.002, 0.002)
-invert_y = false
-mouse_acceleration = 1.0
 gamepad_look_sensitivity = Vector2(0.1, 0.05)
-left_stick_deadzone = 0.1
-right_stick_deadzone = 0.1
-gamepad_acceleration = 1.0
-auto_detect_input_device = true
-input_switch_threshold = 0.1
-vertical_look_limit = 80.0
-horizontal_smoothing = 10.0
-vertical_smoothing = 10.0
 metadata/_custom_type_script = "uid://dtxx8xlsewsfv"

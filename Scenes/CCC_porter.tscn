@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://fvx54iskoapx"]
+[gd_scene format=3 uid="uid://fvx54iskoapx"]
 
 [ext_resource type="Script" uid="uid://d3c3d101qoirc" path="res://Scripts/Character/CharacterController.gd" id="1_d6jmh"]
 [ext_resource type="Script" uid="uid://dkck14xrr3k1x" path="res://Scripts/Camera/CameraSystem.gd" id="1_nfwqg"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" uid="uid://dhfpmbmq55xqo" path="res://Assets/Porter/PorterMain.tscn" id="5_ie3xu"]
 [ext_resource type="Script" uid="uid://dga1kxck5v62n" path="res://Scripts/Control/InputCoordinator.gd" id="6_uj5ul"]
 [ext_resource type="Resource" uid="uid://ba6hbu0x8bufx" path="res://Scripts/Control/InputConfig_A.tres" id="7_ws850"]
+[ext_resource type="Script" uid="uid://bh16mnck8a2vm" path="res://Scripts/Character/MovementSystem.gd" id="9_rsiw4"]
+[ext_resource type="Script" uid="uid://bkv8he7g4u73k" path="res://Scripts/Character/MovementConfig.gd" id="10_lcxqd"]
 [ext_resource type="Script" uid="uid://dib1jwwb3fxyn" path="res://Scripts/Character/MovementDebugVisualizer.gd" id="14_vfsic"]
 
 [sub_resource type="PrismMesh" id="PrismMesh_wa4a6"]
@@ -16,72 +18,90 @@ size = Vector3(0.1, 0.1, 0.1)
 [sub_resource type="SphereShape3D" id="SphereShape3D_12gup"]
 radius = 0.1
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rsiw4"]
+radius = 0.2
+height = 1.7
+
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5wxtv"]
 radius = 0.2
-height = 1.70464
+height = 1.7
 
-[node name="CccPorter" type="Node3D" node_paths=PackedStringArray("character_body", "camera_system", "input_coordinator")]
+[sub_resource type="Resource" id="Resource_w56hs"]
+script = ExtResource("10_lcxqd")
+metadata/_custom_type_script = "uid://bkv8he7g4u73k"
+
+[node name="CccPorter" type="Node3D" unique_id=1352496923 node_paths=PackedStringArray("character_body", "camera_system", "input_coordinator")]
 script = ExtResource("1_d6jmh")
 character_body = NodePath("CharacterBody3D")
 camera_system = NodePath("CameraSystem")
 input_coordinator = NodePath("InputCoordinator")
 
-[node name="CameraLeadTarget" type="MeshInstance3D" parent="."]
-visible = false
+[node name="CameraLeadTarget" type="MeshInstance3D" parent="." unique_id=1823057798]
 mesh = SubResource("PrismMesh_wa4a6")
 skeleton = NodePath("../CameraSystem")
 
-[node name="CameraSystem" type="Node3D" parent="." node_paths=PackedStringArray("delay_system", "zoom_system", "rotation_system", "spring_arm", "camera")]
+[node name="CameraSystem" type="Node3D" parent="." unique_id=1595390908 node_paths=PackedStringArray("delay_system", "zoom_system", "rotation_system", "spring_arm", "camera", "target_object")]
 script = ExtResource("1_nfwqg")
 delay_system = NodePath("CameraDelay")
 zoom_system = NodePath("CameraZoom")
 rotation_system = NodePath("CameraRotation")
 spring_arm = NodePath("SpringArm3D")
 camera = NodePath("SpringArm3D/CameraRig/Camera3D")
-camera_height_offset = 0.0
-camera_distance_offset = 3.0
+target_object = NodePath("../CharacterBody3D")
 
-[node name="CameraDelay" type="Node" parent="CameraSystem"]
+[node name="CameraDelay" type="Node" parent="CameraSystem" unique_id=529403415 node_paths=PackedStringArray("target_visualization")]
 script = ExtResource("2_d6jmh")
-vertical_deadzone = 1.0
-vertical_deadzone_exit_speed = 0.5
+target_visualization = NodePath("../../CameraLeadTarget")
+camera_lead_distance = 2.0
 
-[node name="CameraZoom" type="Node" parent="CameraSystem"]
+[node name="CameraZoom" type="Node" parent="CameraSystem" unique_id=1789304894]
 script = ExtResource("3_7ehud")
 
-[node name="CameraRotation" type="Node" parent="CameraSystem"]
+[node name="CameraRotation" type="Node" parent="CameraSystem" unique_id=1369526738]
 script = ExtResource("4_q20ws")
 
-[node name="SpringArm3D" type="SpringArm3D" parent="CameraSystem"]
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraSystem" unique_id=878119015]
 collision_mask = 2
 shape = SubResource("SphereShape3D_12gup")
 margin = 1.0
 
-[node name="CameraRig" type="Node3D" parent="CameraSystem/SpringArm3D"]
+[node name="CameraRig" type="Node3D" parent="CameraSystem/SpringArm3D" unique_id=148238117]
 
-[node name="Camera3D" type="Camera3D" parent="CameraSystem/SpringArm3D/CameraRig"]
+[node name="Camera3D" type="Camera3D" parent="CameraSystem/SpringArm3D/CameraRig" unique_id=1747627618]
 v_offset = 0.5
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." groups=["player"]]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1252911616 groups=["player"]]
 collision_layer = 3
 slide_on_ceiling = false
 floor_max_angle = 1.22173
 
-[node name="CapsuleCollider" type="CollisionShape3D" parent="CharacterBody3D"]
+[node name="CapsulePreview" type="MeshInstance3D" parent="CharacterBody3D" unique_id=419172217]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+mesh = SubResource("CapsuleMesh_rsiw4")
+
+[node name="CapsuleCollider" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1559916990]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 shape = SubResource("CapsuleShape3D_5wxtv")
+debug_color = Color(0, 0.6, 0.69803923, 0.8745098)
 
-[node name="PorterMain" parent="CharacterBody3D" instance=ExtResource("5_ie3xu")]
+[node name="PorterMain" parent="CharacterBody3D" unique_id=918964728 instance=ExtResource("5_ie3xu")]
+visible = false
 
-[node name="InputCoordinator" type="Node" parent="."]
+[node name="AnimationTree" parent="CharacterBody3D/PorterMain/Porter" index="1" node_paths=PackedStringArray("movement_system")]
+movement_system = NodePath("../../../../MovementSystem")
+
+[node name="InputCoordinator" type="Node" parent="." unique_id=563899000]
 script = ExtResource("6_uj5ul")
 input_config = ExtResource("7_ws850")
 
-[node name="MovementSystem" type="Node" parent="."]
+[node name="MovementSystem" type="Node" parent="." unique_id=1988730838 node_paths=PackedStringArray("character_body", "camera_pivot")]
+script = ExtResource("9_rsiw4")
+movement_config = SubResource("Resource_w56hs")
+character_body = NodePath("../CharacterBody3D")
+camera_pivot = NodePath("../CameraSystem/SpringArm3D/CameraRig/Camera3D")
 
-[node name="MovementDebugVisualizer" type="Node" parent="MovementSystem"]
+[node name="MovementDebugVisualizer" type="Node" parent="MovementSystem" unique_id=944442921]
 script = ExtResource("14_vfsic")
 enable_debug_vectors = true
-vector_height_offset = 2.0
 
 [editable path="CharacterBody3D/PorterMain"]

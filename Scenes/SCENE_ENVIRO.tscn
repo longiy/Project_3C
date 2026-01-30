@@ -1,10 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://c7lyd0ltxwa8"]
+[gd_scene format=3 uid="uid://c7lyd0ltxwa8"]
 
 [ext_resource type="PackedScene" uid="uid://osh7lqk4p408" path="res://Assets/Environment/mushi_map_v_2.tscn" id="4_endwm"]
 [ext_resource type="PackedScene" uid="uid://fvx54iskoapx" path="res://Scenes/CCC_porter.tscn" id="5_woqci"]
 [ext_resource type="Script" uid="uid://dtxx8xlsewsfv" path="res://Scripts/Control/InputConfig.gd" id="6_n8s0r"]
-[ext_resource type="Script" uid="uid://bh16mnck8a2vm" path="res://Scripts/Character/MovementSystem.gd" id="6_t54pj"]
-[ext_resource type="Script" uid="uid://bkv8he7g4u73k" path="res://Scripts/Character/MovementConfig.gd" id="7_n8s0r"]
 
 [sub_resource type="Environment" id="Environment_w862e"]
 background_mode = 2
@@ -35,24 +33,20 @@ auto_exposure_scale = 0.2
 script = ExtResource("6_n8s0r")
 metadata/_custom_type_script = "uid://dtxx8xlsewsfv"
 
-[sub_resource type="Resource" id="Resource_t54pj"]
-script = ExtResource("7_n8s0r")
-metadata/_custom_type_script = "uid://bkv8he7g4u73k"
+[node name="Scene" type="Node3D" unique_id=1118251904]
 
-[node name="Scene" type="Node3D"]
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1858229918]
 environment = SubResource("Environment_w862e")
 camera_attributes = SubResource("CameraAttributesPractical_endwm")
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=385269276]
 transform = Transform3D(0.91212, -0.189281, 0.363606, 0, 0.88701, 0.461749, -0.409923, -0.42117, 0.80906, -0.946876, 1.747, -2.87392)
 shadow_enabled = true
 shadow_bias = 0.0
 directional_shadow_blend_splits = true
 directional_shadow_max_distance = 200.0
 
-[node name="SpotLight3D" type="SpotLight3D" parent="."]
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=792370724]
 transform = Transform3D(0.688025, -0.191953, 0.699839, -1.49012e-08, 0.964382, 0.264513, -0.725687, -0.181991, 0.663519, 9.1058, 143.968, -167.174)
 visible = false
 light_color = Color(0.925825, 0.466993, 0.165723, 1)
@@ -63,7 +57,7 @@ shadow_normal_bias = 0.0
 spot_range = 11.982
 spot_angle = 20.5861
 
-[node name="SpotLight3D2" type="SpotLight3D" parent="."]
+[node name="SpotLight3D2" type="SpotLight3D" parent="." unique_id=1021483595]
 transform = Transform3D(0.688025, -0.191953, 0.699839, -1.49012e-08, 0.964382, 0.264512, -0.725687, -0.181991, 0.663519, 71.3644, 154.289, -114.748)
 visible = false
 light_color = Color(0.925825, 0.466993, 0.165723, 1)
@@ -73,43 +67,8 @@ shadow_bias = 0.2
 spot_range = 274.975
 spot_angle = 43.9079
 
-[node name="MUSHI_Map_V2" parent="." instance=ExtResource("4_endwm")]
+[node name="MUSHI_Map_V2" parent="." unique_id=1202049767 instance=ExtResource("4_endwm")]
 
-[node name="CCCPorter" parent="." node_paths=PackedStringArray("movement_system") instance=ExtResource("5_woqci")]
+[node name="CCCPorter" parent="." unique_id=1866871668 node_paths=PackedStringArray("movement_system") instance=ExtResource("5_woqci")]
 input_config = SubResource("Resource_37vtp")
 movement_system = NodePath("MovementSystem")
-
-[node name="CameraSystem" parent="CCCPorter" index="1" node_paths=PackedStringArray("target_object")]
-target_object = NodePath("../CharacterBody3D")
-
-[node name="CameraDelay" parent="CCCPorter/CameraSystem" index="0" node_paths=PackedStringArray("target_visualization")]
-target_visualization = NodePath("../../CameraLeadTarget")
-
-[node name="AnimationTree" parent="CCCPorter/CharacterBody3D/PorterMain/Porter" index="1" node_paths=PackedStringArray("movement_system")]
-movement_system = NodePath("../../../../MovementSystem")
-
-[node name="NavigationCoordinator" parent="CCCPorter" index="4" node_paths=PackedStringArray("camera", "character_body")]
-process_mode = 4
-camera = NodePath("../CameraSystem/SpringArm3D/CameraRig/Camera3D")
-character_body = NodePath("../CharacterBody3D")
-
-[node name="NavigationCore" parent="CCCPorter/NavigationCoordinator" index="0"]
-process_mode = 4
-
-[node name="ClickDetector" parent="CCCPorter/NavigationCoordinator" index="1"]
-process_mode = 4
-
-[node name="CursorVisual" parent="CCCPorter/NavigationCoordinator" index="2"]
-process_mode = 4
-
-[node name="MarkerManager" parent="CCCPorter/NavigationCoordinator" index="3"]
-process_mode = 4
-
-[node name="MovementSystem" parent="CCCPorter" index="5" node_paths=PackedStringArray("character_body", "camera_pivot")]
-script = ExtResource("6_t54pj")
-movement_config = SubResource("Resource_t54pj")
-character_body = NodePath("../CharacterBody3D")
-camera_pivot = NodePath("../CameraSystem/SpringArm3D/CameraRig/Camera3D")
-
-[editable path="CCCPorter"]
-[editable path="CCCPorter/CharacterBody3D/PorterMain"]
