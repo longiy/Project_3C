@@ -186,9 +186,6 @@ func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delt
 		var velocity = target_node.get_velocity()
 		current_speed = Vector2(velocity.x, velocity.z).length()
 	
-	# Calculate target lead strength based on velocity (0-1 normalized)
-	var target_lead_strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
-	
 	# Determine if moving or stopped
 	var is_moving = movement_direction.length() > movement_threshold
 	
@@ -196,13 +193,16 @@ func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delt
 		# MOVING STATE
 		is_stopping = false
 		
+		# Calculate target lead strength based on velocity (0-1 normalized)
+		var target_lead_strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
+		
 		# Lerp strength and direction toward target
 		var lerp_speed = lead_start_multiplier * delta
 		current_lead_strength = lerp(current_lead_strength, target_lead_strength, lerp_speed)
 		current_lead_direction = current_lead_direction.lerp(movement_direction, lerp_speed)
 	
 	elif not persistent_lead:
-		# STOPPED STATE
+		# STOPPED STATE (only executes if persistent_lead is false)
 		if not is_stopping:
 			is_stopping = true
 			frozen_lead_strength = current_lead_strength
@@ -211,6 +211,8 @@ func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delt
 		var lerp_speed = lead_end_multiplier * delta
 		current_lead_direction = current_lead_direction.lerp(Vector2.ZERO, lerp_speed)
 		current_lead_strength = lerp(current_lead_strength, 0.0, lerp_speed)
+	
+	# If persistent_lead is true and stopped: do nothing - values freeze
 	
 	# Apply lead offset using direction * strength
 	if current_lead_direction.length() > 0.01 and current_lead_strength > 0.01:
