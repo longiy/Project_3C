@@ -15,6 +15,7 @@ class_name CameraZoom
 var target_spring_length: float = 0.0
 var spring_arm: SpringArm3D
 
+
 func initialize(spring_arm_ref: SpringArm3D, distance_offset: float = 0.0):
 	spring_arm = spring_arm_ref
 	target_spring_length = initial_distance + distance_offset

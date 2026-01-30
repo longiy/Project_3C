@@ -3,3 +3,4 @@ res://Assets/Porter/PorterTreeMain.tres
 res://Shaders/LandscapePBR.gdshader
 res://Scripts/Camera/CameraDelay.gd
 res://Scripts/Camera/CameraSystem.gd
+res://Scripts/Camera/CameraZoom.gd

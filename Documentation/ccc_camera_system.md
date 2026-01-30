@@ -149,6 +149,7 @@ func process_vertical_delay(target_position, delta):
 	
 	# Within deadzone → don't move camera
 	if abs(vertical_distance) <= vertical_deadzone:
+		is_vertical_smoothing = false
 		return
 	
 	# Outside deadzone → smooth to edge of zone
@@ -158,6 +159,7 @@ func process_vertical_delay(target_position, delta):
 	
 	var lerp_factor = 1.0 - exp(-delta / vertical_delay_time)
 	current_vertical = lerp(current_vertical, target_outside_zone, lerp_factor)
+	is_vertical_smoothing = true
 ```
 
 **Deadzone Visualization**:
@@ -171,87 +173,215 @@ Character Y:     Camera Y:         Result:
      1.3  ──> Outside zone  ──>    Camera moves toward 1.8
 ```
 
-**Typical Values**:
-- `vertical_deadzone`: 0.5 units
-- `vertical_delay_time`: 0.5 seconds
+**Configuration Guidelines**:
 
-**Purpose of Deadzone**: Prevents camera from following small jumps, head bob during walking, or minor terrain variations.
+| Use Case | `vertical_deadzone` | `vertical_delay_time` | Behavior |
+|----------|---------------------|----------------------|----------|
+| **Fast Action** | 0.3 | 0.1 | Tight vertical tracking, minimal bobbing |
+| **Platformer** | 0.5 | 0.3 | Balanced - follows jumps smoothly |
+| **Exploration** | 0.5 | 0.5 | Slow, cinematic vertical movement |
+| **No Smoothing** | 0.0 | 0.0 | Instant vertical tracking (not recommended) |
+
+**Typical Values**:
+- `vertical_deadzone`: 0.5 units (prevents minor terrain/jump bobbing)
+- `vertical_delay_time`: 0.1-0.5 seconds (faster = more responsive)
+
+**Purpose of Deadzone**: Prevents camera from following:
+- Small jumps and hops
+- Head bob during walking animation
+- Minor terrain variations
+- Footstep-induced vertical oscillation
+
+**Exponential Smoothing**:
+Same formula as horizontal delay:
+```
+lerp_factor = 1.0 - exp(-delta / vertical_delay_time)
+```
+
+Benefits:
+- Framerate-independent
+- Natural deceleration curve
+- Never overshoots target
+
+**Edge Cases**:
+
+1. **No Deadzone (`vertical_deadzone = 0.0`)**:
+   - Camera follows ALL vertical movement
+   - Can cause motion sickness on uneven terrain
+   - Only use for fixed-height environments
+
+2. **Large Deadzone (`vertical_deadzone > 1.0`)**:
+   - Character can move significantly before camera follows
+   - Useful for games with frequent small jumps
+   - Can feel disconnected if too large
+
+3. **Instant Tracking (`vertical_delay_time = 0.0`)**:
+   - Camera snaps to target immediately once outside deadzone
+   - Very jarring - not recommended
+   - Only use if absolutely required for gameplay
+
+**Interaction with Jump Mechanics**:
+
+```gdscript
+# During jump:
+Character Y: 0.0 → 1.5 → 3.0 → 1.5 → 0.0
+
+# With deadzone = 0.5, delay_time = 0.3:
+Camera Y: 0.0 → 0.0 → smooth(2.5) → smooth(1.0) → 0.0
+          (no move) (deadzone) (smooth to top) (smooth down) (settle)
+```
+
+The deadzone prevents camera movement during the initial hop, only engaging when the jump exceeds the threshold.
 
 #### Camera Lead System
 
 **Purpose**: Position camera ahead of movement direction for better forward visibility.
 
-**Velocity-Based Calculation**:
+**Core Mechanism**:
 ```gdscript
-func apply_camera_lead(camera_target, movement_direction, delta):
-	# Get current movement speed
-	var current_speed = target_node.get_velocity().length()
+# Lead strength scales with movement speed
+var speed_ratio = current_speed / max_movement_speed
+current_lead_strength = clamp(speed_ratio, 0.0, 1.0)
+
+# Direction comes from character velocity
+var movement_direction = Vector2(velocity.x, velocity.z).normalized()
+
+# Apply offset
+var lead_offset = Vector3(movement_direction.x, 0, movement_direction.y)
+lead_offset *= camera_lead_distance * current_lead_strength
+camera_target += lead_offset
+```
+
+**Strength Ramping**:
+```gdscript
+func update_lead_strength(delta: float):
+	var target_strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
 	
-	# Calculate lead strength (0-1 normalized by max speed)
-	var target_lead_strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
+	# Different multipliers for starting vs stopping
+	var multiplier = lead_start_multiplier if target_strength > current_lead_strength else lead_end_multiplier
 	
-	# Smooth strength and direction toward target
-	if is_moving:
-		current_lead_strength = lerp(current_lead_strength, target_lead_strength, lead_start_multiplier * delta)
-		current_lead_direction = current_lead_direction.lerp(movement_direction, lead_start_multiplier * delta)
+	current_lead_strength = lerp(current_lead_strength, target_strength, delta * multiplier)
+```
+
+**Direction Smoothing**:
+```gdscript
+func update_lead_direction(delta: float):
+	var target_direction = get_movement_direction()  # From character velocity
+	
+	# Smooth direction changes
+	if target_direction.length() > 0.01:
+		current_lead_direction = current_lead_direction.lerp(target_direction, delta * lead_start_multiplier)
 	elif not persistent_lead:
-		current_lead_direction = current_lead_direction.lerp(Vector2.ZERO, lead_end_multiplier * delta)
-		current_lead_strength = lerp(current_lead_strength, 0.0, lead_end_multiplier * delta)
-	
-	# Apply offset
-	var direction_offset = Vector3(current_lead_direction.x, 0, current_lead_direction.y)
-	direction_offset *= camera_lead_distance * current_lead_strength
-	
-	return camera_target + direction_offset
+		# Return to zero when stopped (if not persistent)
+		current_lead_direction = current_lead_direction.lerp(Vector2.ZERO, delta * lead_end_multiplier)
 ```
 
-**Parameters**:
+**Static Reset System**:
 ```gdscript
-@export var enable_camera_lead: bool = true
-@export var camera_lead_distance: float = 1.5        # Maximum offset distance
-@export var persistent_lead: bool = true             # Maintain when stopped
-@export var max_movement_speed: float = 6.0          # Speed for 100% strength
-@export var lead_start_multiplier: float = 8.0       # Speed of lead response
-@export var lead_end_multiplier: float = 3.0         # Speed of lead return
+# Track time spent static
+if current_velocity.length() < velocity_change_threshold:
+	static_time += delta
+	if static_time >= lead_reset_time:
+		# Reset lead when character hasn't moved for reset_time seconds
+		current_lead_direction = Vector2.ZERO
+		current_lead_strength = 0.0
+else:
+	static_time = 0.0  # Reset timer on movement
 ```
 
-**Behavior Diagram**:
-```mermaid
-stateDiagram-v2
-    [*] --> NoLead: Speed = 0
-    
-    NoLead --> Building: Start Moving
-    Building --> FullLead: Speed = Max
-    
-    FullLead --> Returning: Stop Moving<br/>(persistent_lead = false)
-    FullLead --> Maintained: Stop Moving<br/>(persistent_lead = true)
-    
-    Returning --> NoLead: Lead = 0
-    Maintained --> Maintained: Speed = 0
-    
-    note right of Building
-        Strength increases
-        Direction smooths to movement
-    end note
-    
-    note right of Returning
-        Direction smooths to zero
-        Strength decreases
-    end note
+**Behavior Modes**:
+
+| Mode | `persistent_lead` | Behavior When Stopped |
+|------|-------------------|----------------------|
+| **Non-Persistent** | `false` | Lead gradually recenters using `lead_end_multiplier`. After `lead_reset_time` seconds of no movement, lead fully resets |
+| **Persistent** | `true` | Lead maintains last direction until character moves again. Reset only occurs after `lead_reset_time` seconds of being completely static |
+
+**Configuration Examples**:
+
+**Responsive Action Game:**
+```gdscript
+camera_lead_distance = 2.0
+lead_start_multiplier = 3.0  # Quick lead response
+lead_end_multiplier = 1.5    # Fast return
+persistent_lead = false
+lead_reset_time = 2.0        # Quick reset when idle
 ```
 
-**Lead Strength Formula**:
-```
-strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
-offset = movement_direction * camera_lead_distance * strength
+**Smooth Exploration Game:**
+```gdscript
+camera_lead_distance = 1.5
+lead_start_multiplier = 1.0  # Gradual lead buildup
+lead_end_multiplier = 0.5    # Smooth return
+persistent_lead = false
+lead_reset_time = 4.0        # Patient reset
 ```
 
-**Example**:
+**Cinematic Adventure:**
+```gdscript
+camera_lead_distance = 3.0
+lead_start_multiplier = 0.8  # Very gradual
+lead_end_multiplier = 0.3    # Very smooth return
+persistent_lead = true       # Maintain view direction
+lead_reset_time = 5.0        # Long idle before reset
 ```
-Speed = 0.0   → Strength = 0.0 → Offset = 0.0 units
-Speed = 3.0   → Strength = 0.5 → Offset = 0.75 units ahead
-Speed = 6.0   → Strength = 1.0 → Offset = 1.5 units ahead
+
+**Velocity vs Input Direction**:
+
+Lead uses **character velocity**, not input direction. This provides natural behavior for:
+- **Momentum**: Lead persists during slides/drift
+- **Knockback**: Camera shows direction of impact
+- **Moving Platforms**: Lead accounts for platform velocity
+- **Slopes**: Natural camera adjustment on inclines
+
+**Typical Values**:
+- `camera_lead_distance`: 1.5-3.0 units (higher = more pronounced look-ahead)
+- `max_movement_speed`: Should match character's `sprint_speed`
+- `lead_start_multiplier`: 0.5-4.0 (higher = snappier response)
+- `lead_end_multiplier`: 0.3-2.0 (lower = smoother return)
+- `lead_reset_time`: 2.0-5.0 seconds (time before auto-reset when idle)
+- `velocity_change_threshold`: 0.05-0.2 (prevents reset during micro-movements)
+
+**Visual Example**:
 ```
+No Lead (lead_distance = 0):
+    ┌─────┐
+    │  ⬆  │ Character
+    └─────┘
+       ▲
+    Camera directly behind
+
+With Lead (lead_distance = 2.0, moving forward):
+       ┌─────┐
+       │  ⬆  │ Character
+       └─────┘
+          ▲
+       (lead offset)
+          ▲
+       Camera
+       
+View shifts ahead by 2.0 units in movement direction
+```
+
+**Integration with Horizontal Delay**:
+
+Lead is applied **before** horizontal smoothing:
+```gdscript
+func process_horizontal_delay(target_position, delta):
+	var camera_target = target_position
+	
+	# Step 1: Apply lead offset to get target
+	if enable_camera_lead:
+		camera_target = apply_camera_lead(camera_target, movement_direction, delta)
+	
+	# Step 2: Smooth toward lead-adjusted target
+	if horizontal_delay_time > 0:
+		current_horizontal = current_horizontal.lerp(camera_target, lerp_factor)
+```
+
+This sequence ensures:
+1. Lead determines where camera should look
+2. Delay determines how quickly camera reaches that position
+3. Result: Smooth camera that intelligently anticipates movement
 
 ### CameraZoom (Distance Management)
 

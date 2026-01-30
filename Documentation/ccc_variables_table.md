@@ -25,39 +25,54 @@
 - `0.3` = Smooth, cinematic (adventure games)
 - `0.5` = Loose, floaty (casual games)
 
+---
+
 #### Vertical Following
 
 | Variable | Type | Default | Description | Typical Range |
 |----------|------|---------|-------------|---------------|
-| `vertical_delay_time` | float | `0.5` | Time in seconds for camera to catch up vertically (Y axis). Usually slower than horizontal | 0.3-1.0s |
+| `vertical_delay_time` | float | `0.1` | Time in seconds for camera to catch up vertically (Y axis). Usually slower than horizontal | 0.3-1.0s |
 | `vertical_deadzone` | float | `0.5` | Vertical distance character can move before camera follows. Prevents camera bobbing | 0.2-1.0 |
 | `vertical_deadzone_exit_speed` | float | `0.5` | Currently unused. Reserved for future deadzone exit behavior | - |
+
+---
 
 #### Camera Lead System
 
 | Variable | Type | Default | Description | Typical Range |
 |----------|------|---------|-------------|---------------|
+| `target_visualization` | Node3D | `null` | Node3D reference for visualizing lead target position. Optional debug tool | - |
 | `enable_camera_lead` | bool | `true` | Enables camera positioning ahead of movement direction for better forward visibility | - |
-| `camera_lead_distance` | float | `1.5` | Maximum distance camera shifts ahead of character. Scales with movement speed | 1.0-3.0 |
-| `persistent_lead` | bool | `true` | Whether lead persists when stopped. true = keeps view ahead, false = recenters | - |
+| `camera_lead_distance` | float | `3.0` | Maximum distance camera shifts ahead of character. Scales with movement speed | 1.0-3.0 |
+| `persistent_lead` | bool | `false` | Whether lead persists when stopped. true = keeps view ahead, false = recenters | - |
 | `max_movement_speed` | float | `6.0` | Speed at which lead reaches maximum strength. Lead strength = current_speed / max_movement_speed | Match sprint_speed |
-| `lead_start_multiplier` | float | `8.0` | How fast lead responds when starting to move. Higher = snappier response | 4.0-12.0 |
-| `lead_end_multiplier` | float | `3.0` | How fast lead returns when stopping (only if persistent_lead = false). Usually slower than start | 2.0-6.0 |
+| `lead_start_multiplier` | float | `1.0` | How fast lead responds when starting to move. Higher = snappier response | 0.5-4.0 |
+| `lead_end_multiplier` | float | `0.5` | How fast lead returns when stopping (only if persistent_lead = false). Lower = smoother return | 0.3-2.0 |
+| `lead_reset_time` | float | `3.0` | Time in seconds before lead resets when character is static | 2.0-5.0 |
+| `velocity_change_threshold` | float | `0.1` | Minimum velocity change to reset static timer. Prevents premature reset during micro-movements | 0.05-0.2 |
 
-**Lead Speed Feel:**
-- `lead_start_multiplier 4.0` = Smooth, cinematic
-- `lead_start_multiplier 8.0` = Balanced
-- `lead_start_multiplier 12.0` = Instant, responsive
+**Lead Strength Calculation:**
+```
+lead_strength = clamp(current_speed / max_movement_speed, 0.0, 1.0)
+lead_offset = lead_direction * camera_lead_distance * lead_strength
+```
+
+**Feel Guide:**
+- High `lead_start_multiplier` (2.0-4.0) = Instant lead on movement (responsive)
+- Low `lead_start_multiplier` (0.5-1.0) = Gradual lead buildup (cinematic)
+- High `lead_end_multiplier` (1.5-3.0) = Quick return to center (snappy)
+- Low `lead_end_multiplier` (0.3-0.8) = Slow return to center (smooth)
+
+---
 
 #### Smoothing Thresholds
 
 | Variable | Type | Default | Description | Typical Range |
 |----------|------|---------|-------------|---------------|
-| `movement_threshold` | float | `0.1` | Minimum movement speed to count as "moving" for lead system. Prevents activation from tiny movements | 0.05-0.2 |
-| `position_close_threshold` | float | `0.01` | Distance threshold to consider camera "caught up". Optimization for smoothing calculation | 0.005-0.02 |
-| `target_visualization` | Node3D | `null` | Optional mesh showing where camera is targeting. Visual debug for lead offset | - |
+| `movement_threshold` | float | `0.1` | Minimum movement delta to trigger smoothing updates. Prevents micro-adjustments | 0.05-0.2 |
+| `position_close_threshold` | float | `0.01` | Distance threshold for considering camera "arrived" at target. Used to disable smoothing flag | 0.005-0.05 |
 
----
+**Purpose:** Optimize performance by avoiding unnecessary smoothing calculations when changes are negligible.
 
 ### CameraZoom Component
 
