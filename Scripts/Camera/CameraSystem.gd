@@ -19,7 +19,7 @@ var input_config: InputConfig : set = set_input_config
 @export var enabled: bool = true
 
 @export_group("Camera Position")
-@export var camera_height_offset: float = 1.5
+@export var camera_height_offset: float = 0.5
 @export var camera_distance_offset: float = 2.0
 
 # === INTERNAL STATE ===

@@ -59,7 +59,6 @@ target_object = NodePath("../CharacterBody3D")
 [node name="CameraDelay" type="Node" parent="CameraSystem" unique_id=529403415 node_paths=PackedStringArray("target_visualization")]
 script = ExtResource("2_d6jmh")
 target_visualization = NodePath("../../CameraLeadTarget")
-camera_lead_distance = 2.0
 
 [node name="CameraZoom" type="Node" parent="CameraSystem" unique_id=1789304894]
 script = ExtResource("3_7ehud")

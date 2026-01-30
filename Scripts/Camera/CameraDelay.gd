@@ -19,7 +19,7 @@ var is_horizontal_smoothing: bool = false
 
 # === VERTICAL DELAY SYSTEM ===
 @export_group("Vertical Following")
-@export var vertical_delay_time: float = 0.5
+@export var vertical_delay_time: float = 0.1
 @export var vertical_deadzone: float = 0.5  
 @export var vertical_deadzone_exit_speed: float = 0.5 
 
@@ -30,21 +30,25 @@ var is_vertical_smoothing: bool = false
 # ============================================================================
 # CAMERA LEAD SYSTEM
 # ============================================================================
+
 @export_group("Camera Lead")
 @export var target_visualization: Node3D
 @export var enable_camera_lead: bool = true
-@export var camera_lead_distance: float = 1.5
-@export var persistent_lead: bool = true
+@export var camera_lead_distance: float = 3
+@export var persistent_lead: bool = false
 @export var max_movement_speed: float = 6.0
+@export var lead_start_multiplier: float = 1
+@export var lead_end_multiplier: float = 0.5
+@export var lead_reset_time: float = 3.0  # Time before lead resets when static
+@export var velocity_change_threshold: float = 0.1  # Minimum velocity change to reset timer
 
-@export var lead_start_multiplier: float = 8.0  # Speed of lead response when moving
-@export var lead_end_multiplier: float = 3.0    # Speed of lead return when stopped
-
-# Lead state
+# Lead state (add these to existing Lead state section)
 var current_lead_direction: Vector2 = Vector2.ZERO
 var current_lead_strength: float = 0.0
 var frozen_lead_strength: float = 0.0
 var is_stopping: bool = false
+var last_velocity: Vector2 = Vector2.ZERO
+var static_time: float = 0.0
 # ============================================================================
 # SHARED CONFIGURATION
 # ============================================================================
@@ -180,14 +184,29 @@ func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delt
 			target_visualization.global_position = camera_target
 		return camera_target
 	
-	# Get current velocity magnitude
+	# Get current velocity
+	var current_velocity = Vector2.ZERO
 	var current_speed = 0.0
 	if target_node and target_node.has_method("get_velocity"):
 		var velocity = target_node.get_velocity()
-		current_speed = Vector2(velocity.x, velocity.z).length()
+		current_velocity = Vector2(velocity.x, velocity.z)
+		current_speed = current_velocity.length()
+	
+	# Detect velocity change
+	var velocity_changed = current_velocity.distance_to(last_velocity) > velocity_change_threshold
+	
+	# Update static timer
+	if velocity_changed:
+		static_time = 0.0  # Reset timer on velocity change
+		last_velocity = current_velocity
+	else:
+		static_time += delta  # Accumulate time when velocity is static
 	
 	# Determine if moving or stopped
 	var is_moving = movement_direction.length() > movement_threshold
+	
+	# Check if reset timer exceeded
+	var should_reset = persistent_lead and static_time >= lead_reset_time
 	
 	if is_moving:
 		# MOVING STATE
@@ -201,8 +220,8 @@ func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delt
 		current_lead_strength = lerp(current_lead_strength, target_lead_strength, lerp_speed)
 		current_lead_direction = current_lead_direction.lerp(movement_direction, lerp_speed)
 	
-	elif not persistent_lead:
-		# STOPPED STATE (only executes if persistent_lead is false)
+	elif not persistent_lead or should_reset:
+		# STOPPED STATE (executes if persistent_lead is false OR reset timer exceeded)
 		if not is_stopping:
 			is_stopping = true
 			frozen_lead_strength = current_lead_strength
@@ -212,7 +231,7 @@ func apply_camera_lead(camera_target: Vector3, movement_direction: Vector2, delt
 		current_lead_direction = current_lead_direction.lerp(Vector2.ZERO, lerp_speed)
 		current_lead_strength = lerp(current_lead_strength, 0.0, lerp_speed)
 	
-	# If persistent_lead is true and stopped: do nothing - values freeze
+	# If persistent_lead is true, stopped, and timer not exceeded: do nothing - values freeze
 	
 	# Apply lead offset using direction * strength
 	if current_lead_direction.length() > 0.01 and current_lead_strength > 0.01:
