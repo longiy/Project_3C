@@ -8,6 +8,7 @@
 [ext_resource type="Script" uid="uid://dkqykiqarykxi" path="res://Scripts/Camera/CameraRotaion.gd" id="4_q20ws"]
 [ext_resource type="PackedScene" uid="uid://dhfpmbmq55xqo" path="res://Assets/Porter/PorterMain.tscn" id="5_ie3xu"]
 [ext_resource type="Script" uid="uid://dga1kxck5v62n" path="res://Scripts/Control/InputCoordinator.gd" id="6_uj5ul"]
+[ext_resource type="Script" uid="uid://cndsnej173wka" path="res://Scripts/IK/FootIKController.gd" id="7_w56hs"]
 [ext_resource type="Resource" uid="uid://ba6hbu0x8bufx" path="res://Scripts/Control/InputConfig_A.tres" id="7_ws850"]
 [ext_resource type="Script" uid="uid://bh16mnck8a2vm" path="res://Scripts/Character/MovementSystem.gd" id="9_rsiw4"]
 [ext_resource type="Script" uid="uid://bkv8he7g4u73k" path="res://Scripts/Character/MovementConfig.gd" id="10_lcxqd"]
@@ -76,13 +77,23 @@ margin = 1.0
 [node name="Camera3D" type="Camera3D" parent="CameraSystem/SpringArm3D/CameraRig" unique_id=1747627618]
 v_offset = 0.5
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1252911616 groups=["player"]]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1252911616 node_paths=PackedStringArray("skeleton", "character_body", "fabrik_left", "fabrik_right", "ik_target_left", "ik_target_right", "raycast_left", "raycast_right") groups=["player"]]
 collision_layer = 3
 slide_on_ceiling = false
 floor_max_angle = 1.22173
+script = ExtResource("7_w56hs")
+skeleton = NodePath("PorterMain/Porter/rig/Skeleton3D")
+character_body = NodePath(".")
+fabrik_left = NodePath("PorterMain/Porter/rig/Skeleton3D/FABRIK_LefLeg")
+fabrik_right = NodePath("PorterMain/Porter/rig/Skeleton3D/FABRIK_RightLeg")
+ik_target_left = NodePath("IKTargetLeft")
+ik_target_right = NodePath("IKTargetRight")
+raycast_left = NodePath("FootRayLeft")
+raycast_right = NodePath("FootRayRight")
 
 [node name="CapsulePreview" type="MeshInstance3D" parent="CharacterBody3D" unique_id=419172217]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+visible = false
 mesh = SubResource("CapsuleMesh_rsiw4")
 
 [node name="CapsuleCollider" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1559916990]
@@ -91,10 +102,91 @@ shape = SubResource("CapsuleShape3D_5wxtv")
 debug_color = Color(0, 0.6, 0.69803923, 0.8745098)
 
 [node name="PorterMain" parent="CharacterBody3D" unique_id=918964728 instance=ExtResource("5_ie3xu")]
-visible = false
+
+[node name="Skeleton3D" parent="CharacterBody3D/PorterMain/Porter/rig" index="0"]
+bones/22/position = Vector3(0.15951502, 1.345619, -0.027196702)
+bones/22/rotation = Quaternion(-0.11042042, -0.3364147, 0.9110325, -0.21131104)
+bones/22/scale = Vector3(1.0140465, 0.97248816, 1.0140464)
+bones/23/rotation = Quaternion(4.7390852e-08, -0.013654599, -1.3146319e-08, 0.9999068)
+bones/23/scale = Vector3(1.0000001, 1.0000002, 1)
+bones/24/rotation = Quaternion(0.93518925, -0.013260559, 0.03602229, 0.35206196)
+bones/24/scale = Vector3(1.0030628, 0.9763948, 1.0219272)
+bones/25/rotation = Quaternion(2.1527509e-09, -0.11444096, -3.215689e-08, 0.9934301)
+bones/25/scale = Vector3(1, 0.9999997, 0.9999999)
+bones/26/rotation = Quaternion(0.34613994, -0.11146837, -0.19907136, 0.9100179)
+bones/26/scale = Vector3(0.99307173, 1.0076526, 1.0009775)
+bones/28/position = Vector3(-0.15951507, 1.3456188, -0.027196623)
+bones/28/rotation = Quaternion(0.11042032, -0.3364149, 0.9110325, 0.21131092)
+bones/28/scale = Vector3(1.0140463, 0.9724886, 1.0140461)
+bones/29/rotation = Quaternion(7.496584e-09, 0.013654747, -8.528201e-08, 0.9999068)
+bones/29/scale = Vector3(0.99999994, 1.0000004, 0.99999976)
+bones/30/rotation = Quaternion(0.93518937, 0.013260676, -0.036022026, 0.3520619)
+bones/30/scale = Vector3(1.0030636, 0.9763938, 1.0219276)
+bones/31/rotation = Quaternion(-4.995112e-07, 0.11444085, 2.3611506e-07, 0.9934301)
+bones/31/scale = Vector3(1.0000002, 0.9999991, 1.0000002)
+bones/32/rotation = Quaternion(0.3461405, 0.111468054, 0.19907144, 0.9100177)
+bones/32/scale = Vector3(0.9930716, 1.0076529, 1.0009776)
+
+[node name="FABRIK_LefLeg" type="FABRIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="1" unique_id=840692306]
+max_iterations = 15
+setting_count = 1
+settings/0/target_node = NodePath("../../../../../IKTargetLeft")
+settings/0/root_bone_name = "DEF-thigh.L"
+settings/0/root_bone = 9
+settings/0/end_bone_name = "DEF-toe.L"
+settings/0/end_bone = 14
+settings/0/extend_end_bone = false
+settings/0/joint_count = 6
+settings/0/joints/0/rotation_axis = 3
+settings/0/joints/0/limitation = null
+settings/0/joints/1/rotation_axis = 3
+settings/0/joints/1/limitation = null
+settings/0/joints/2/rotation_axis = 3
+settings/0/joints/2/limitation = null
+settings/0/joints/3/rotation_axis = 3
+settings/0/joints/3/limitation = null
+settings/0/joints/4/rotation_axis = 3
+settings/0/joints/4/limitation = null
+settings/0/joints/5/rotation_axis = 3
+settings/0/joints/5/limitation = null
+
+[node name="FABRIK_RightLeg" type="FABRIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="2" unique_id=850509784]
+max_iterations = 15
+setting_count = 1
+settings/0/target_node = NodePath(".")
+settings/0/root_bone_name = "DEF-thigh.R"
+settings/0/root_bone = 15
+settings/0/end_bone_name = "DEF-toe.R"
+settings/0/end_bone = 20
+settings/0/extend_end_bone = false
+settings/0/joint_count = 6
+settings/0/joints/0/rotation_axis = 3
+settings/0/joints/0/limitation = null
+settings/0/joints/1/rotation_axis = 3
+settings/0/joints/1/limitation = null
+settings/0/joints/2/rotation_axis = 3
+settings/0/joints/2/limitation = null
+settings/0/joints/3/rotation_axis = 3
+settings/0/joints/3/limitation = null
+settings/0/joints/4/rotation_axis = 3
+settings/0/joints/4/limitation = null
+settings/0/joints/5/rotation_axis = 3
+settings/0/joints/5/limitation = null
 
 [node name="AnimationTree" parent="CharacterBody3D/PorterMain/Porter" index="1" node_paths=PackedStringArray("movement_system")]
 movement_system = NodePath("../../../../MovementSystem")
+
+[node name="IKTargetLeft" type="Node3D" parent="CharacterBody3D" unique_id=1362970266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14097878, 0, 0)
+
+[node name="IKTargetRight" type="Node3D" parent="CharacterBody3D" unique_id=860495319]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1581431, 0, 0)
+
+[node name="FootRayLeft" type="RayCast3D" parent="CharacterBody3D" unique_id=1395765747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14060289, 0, 0)
+
+[node name="FootRayRight" type="RayCast3D" parent="CharacterBody3D" unique_id=1614566618]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15264305, 0, 0)
 
 [node name="InputCoordinator" type="Node" parent="." unique_id=563899000]
 script = ExtResource("6_uj5ul")
