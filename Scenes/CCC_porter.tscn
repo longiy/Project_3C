@@ -84,8 +84,8 @@ floor_max_angle = 1.22173
 script = ExtResource("7_w56hs")
 skeleton = NodePath("PorterMain/Porter/rig/Skeleton3D")
 character_body = NodePath(".")
-fabrik_left = NodePath("PorterMain/Porter/rig/Skeleton3D/TwoBoneIK_LeftLeg")
-fabrik_right = NodePath("PorterMain/Porter/rig/Skeleton3D/TwoBoneIK_RightLeg")
+fabrik_left = NodePath("PorterMain/Porter/rig/Skeleton3D/FABRIK_LefLeg")
+fabrik_right = NodePath("PorterMain/Porter/rig/Skeleton3D/FABRIK_RightLeg")
 ik_target_left = NodePath("IKTargetLeft")
 ik_target_right = NodePath("IKTargetRight")
 raycast_left = NodePath("FootRayLeft")
@@ -127,42 +127,60 @@ bones/31/scale = Vector3(1.0000002, 0.9999991, 1.0000002)
 bones/32/rotation = Quaternion(0.3461405, 0.111468054, 0.19907144, 0.9100177)
 bones/32/scale = Vector3(0.9930716, 1.0076529, 1.0009776)
 
-[node name="TwoBoneIK_LeftLeg" type="TwoBoneIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="1" unique_id=44393663]
+[node name="FABRIK_LefLeg" type="FABRIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="1" unique_id=840692306]
+max_iterations = 15
 setting_count = 1
 settings/0/target_node = NodePath("../../../../../IKTargetLeft")
-settings/0/pole_node = NodePath("")
 settings/0/root_bone_name = "DEF-thigh.L"
 settings/0/root_bone = 9
-settings/0/middle_bone_name = "DEF-shin.L"
-settings/0/middle_bone = 11
-settings/0/pole_direction = 6
-settings/0/end_bone_name = "DEF-foot.L"
-settings/0/end_bone = 13
-settings/0/use_virtual_end = false
+settings/0/end_bone_name = "DEF-toe.L"
+settings/0/end_bone = 14
 settings/0/extend_end_bone = false
+settings/0/joint_count = 6
+settings/0/joints/0/rotation_axis = 3
+settings/0/joints/0/limitation = null
+settings/0/joints/1/rotation_axis = 3
+settings/0/joints/1/limitation = null
+settings/0/joints/2/rotation_axis = 3
+settings/0/joints/2/limitation = null
+settings/0/joints/3/rotation_axis = 3
+settings/0/joints/3/limitation = null
+settings/0/joints/4/rotation_axis = 3
+settings/0/joints/4/limitation = null
+settings/0/joints/5/rotation_axis = 3
+settings/0/joints/5/limitation = null
 
-[node name="TwoBoneIK_RightLeg" type="TwoBoneIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="2" unique_id=117705827]
+[node name="FABRIK_RightLeg" type="FABRIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="2" unique_id=850509784]
+max_iterations = 15
 setting_count = 1
-settings/0/target_node = NodePath("../../../../../FootRayRight")
-settings/0/pole_node = NodePath("")
+settings/0/target_node = NodePath("../../../../../IKTargetRight")
 settings/0/root_bone_name = "DEF-thigh.R"
 settings/0/root_bone = 15
-settings/0/middle_bone_name = "DEF-shin.R"
-settings/0/middle_bone = 17
-settings/0/pole_direction = 6
-settings/0/end_bone_name = "DEF-foot.R"
-settings/0/end_bone = 19
-settings/0/use_virtual_end = false
+settings/0/end_bone_name = "DEF-toe.R"
+settings/0/end_bone = 20
 settings/0/extend_end_bone = false
+settings/0/joint_count = 6
+settings/0/joints/0/rotation_axis = 3
+settings/0/joints/0/limitation = null
+settings/0/joints/1/rotation_axis = 3
+settings/0/joints/1/limitation = null
+settings/0/joints/2/rotation_axis = 3
+settings/0/joints/2/limitation = null
+settings/0/joints/3/rotation_axis = 3
+settings/0/joints/3/limitation = null
+settings/0/joints/4/rotation_axis = 3
+settings/0/joints/4/limitation = null
+settings/0/joints/5/rotation_axis = 3
+settings/0/joints/5/limitation = null
 
 [node name="AnimationTree" parent="CharacterBody3D/PorterMain/Porter" index="1" node_paths=PackedStringArray("movement_system")]
 movement_system = NodePath("../../../../MovementSystem")
 
 [node name="IKTargetLeft" type="Node3D" parent="CharacterBody3D" unique_id=1362970266]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.145, 0.057, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14097878, 0, 0)
 
 [node name="IKTargetRight" type="Node3D" parent="CharacterBody3D" unique_id=860495319]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.145, 0, -0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.1581431, 0, 0)
 
 [node name="FootRayLeft" type="RayCast3D" parent="CharacterBody3D" unique_id=1395765747]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.14060289, 0, 0)
