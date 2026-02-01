@@ -77,12 +77,6 @@ func _reset_target_rotations():
 	ik_target_left.global_basis = basis
 	ik_target_right.global_basis = basis
 
-
-# --- HELPER FUNCTIONS ---
-
-
-
-# TO THIS
 func _align_with_normal(forward_direction: Vector3, normal: Vector3) -> Basis:
 	var world_up = Vector3.UP
 	

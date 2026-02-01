@@ -104,13 +104,20 @@ debug_color = Color(0, 0.6, 0.69803923, 0.8745098)
 [node name="PorterMain" parent="CharacterBody3D" unique_id=686191924 instance=ExtResource("5_ie3xu")]
 
 [node name="BoneAttachment3D_Knee_L" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" parent_id_path=PackedInt32Array(686191924, 1782406787) index="3" unique_id=798636203]
-transform = Transform3D(0.9953903, 0.07127325, -0.0641754, 0.07042623, -0.9973986, -0.0153682735, -0.0651038, 0.010777798, -0.9978203, 0.11289346, 0.5192691, -0.005611115)
+transform = Transform3D(0.99626297, 0.06587607, -0.055860627, 0.065164015, -0.9977697, -0.014475893, -0.056689646, 0.010781694, -0.9983338, 0.08426996, 0.9198267, -0.009939465)
+bone_name = "DEF-thigh.L"
+bone_idx = 9
 
 [node name="BoneAttachment3D_Knee_R" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" parent_id_path=PackedInt32Array(686191924, 1782406787) index="4" unique_id=1490780977]
-transform = Transform3D(0.99539024, -0.071273305, 0.06417681, -0.07042624, -0.997399, -0.015368341, 0.06510521, 0.010777764, -0.99782044, -0.112893455, 0.5192691, -0.0056111133)
+transform = Transform3D(0.99472475, -0.07127324, 0.07377504, -0.07027468, -0.9973986, -0.016046844, 0.074726835, 0.010777676, -0.9971459, -0.08426995, 0.9198267, -0.009939457)
+bone_name = "DEF-thigh.R"
+bone_idx = 13
 
 [node name="AnimationTree" parent="CharacterBody3D/PorterMain/Porter" parent_id_path=PackedInt32Array(686191924, 1438479390) index="1" unique_id=787079905 node_paths=PackedStringArray("movement_system")]
 movement_system = NodePath("../../../../MovementSystem")
+
+[node name="IKTargetLeft" parent="CharacterBody3D/PorterMain" index="1" unique_id=1169151833]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.145, 0, 0)
 
 [node name="FootRayLeft" type="RayCast3D" parent="CharacterBody3D" unique_id=414805567]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0)
