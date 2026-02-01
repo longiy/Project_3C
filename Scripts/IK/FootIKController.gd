@@ -6,8 +6,8 @@ class_name FootIKController
 @export var character_body: CharacterBody3D
 
 # IK components
-@export var fabrik_left: FABRIK3D
-@export var fabrik_right: FABRIK3D
+@export var fabrik_left: TwoBoneIK3D  # Changed from FABRIK3D
+@export var fabrik_right: TwoBoneIK3D  # Changed from FABRIK3D
 @export var ik_target_left: Node3D
 @export var ik_target_right: Node3D
 @export var raycast_left: RayCast3D
@@ -19,15 +19,15 @@ var foot_bone_right_idx: int = -1
 
 # Configuration
 @export_group("IK Settings")
-@export var ray_start_height: float = 0.5  # Height above foot to start ray
-@export var ray_length: float = 2.0  # Max distance to check
-@export var ik_blend_speed: float = 10.0  # How fast IK influence changes
-@export var foot_height_offset: float = 0.0  # Adjust if feet sink/float
+@export var ray_start_height: float = 0.5
+@export var ray_length: float = 2.0
+@export var ik_blend_speed: float = 10.0
+@export var foot_height_offset: float = 0.0
 
 @export_group("Contact Detection")
 @export var enable_contact_detection: bool = true
-@export var contact_velocity_threshold: float = 0.5  # Speed below which foot is "planted"
-@export var vertical_velocity_threshold: float = 2.0  # Vertical speed to disable IK (jumping)
+@export var contact_velocity_threshold: float = 0.5
+@export var vertical_velocity_threshold: float = 2.0
 
 # Runtime state
 var current_ik_influence_left: float = 0.0
@@ -35,9 +35,9 @@ var current_ik_influence_right: float = 0.0
 var is_grounded: bool = false
 
 func _ready():
-	# Cache bone indices
-	foot_bone_left_idx = skeleton.find_bone("DEF-toe.L")
-	foot_bone_right_idx = skeleton.find_bone("DEF-toe.R")
+	# Cache bone indices - use FOOT for TwoBoneIK (not toe)
+	foot_bone_left_idx = skeleton.find_bone("DEF-foot.L")  # Changed from toe
+	foot_bone_right_idx = skeleton.find_bone("DEF-foot.R")  # Changed from toe
 	
 	if foot_bone_left_idx == -1 or foot_bone_right_idx == -1:
 		push_error("FootIKController: Could not find foot bones. Check bone names.")
@@ -81,7 +81,7 @@ func process_foot_ik(
 	bone_idx: int,
 	raycast: RayCast3D,
 	ik_target: Node3D,
-	fabrik: FABRIK3D,
+	fabrik: TwoBoneIK3D,  # Changed type hint
 	influence_var: float,
 	delta: float
 ) -> void:
@@ -142,7 +142,7 @@ func should_use_ik_for_foot(raycast: RayCast3D, foot_pos: Vector3) -> bool:
 func align_to_normal(normal: Vector3, original_basis: Basis) -> Basis:
 	# Align Y-axis to normal, preserve forward direction
 	var up = normal
-	var forward = -original_basis.z  # Keep foot pointing direction
+	var forward = -original_basis.z
 	
 	# Handle edge case: normal parallel to forward
 	if abs(up.dot(forward)) > 0.99:
