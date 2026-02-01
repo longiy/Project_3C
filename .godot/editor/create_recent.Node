@@ -1,4 +1,9 @@
+TwoBoneIK3D
+BoneTwistDisperser3D
+PhysicalBoneSimulator3D
+FABRIK3D
+JacobianIK3D
+SkeletonIK3D
 RayCast3D
 Node3D
-FABRIK3D
 MeshInstance3D

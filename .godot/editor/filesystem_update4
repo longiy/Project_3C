@@ -1,4 +1,5 @@
-res://Scenes/CCC_porter.tscn
-res://Assets/Porter/PorterTreeMain.tres
+res://Assets/Porter/PorterMain.tscn
 res://Shaders/LandscapePBR.gdshader
+res://Assets/Porter/PorterTreeMain.tres
+res://Scenes/CCC_porter.tscn
 res://Scripts/IK/FootIKController.gd
