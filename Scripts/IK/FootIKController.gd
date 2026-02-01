@@ -36,8 +36,8 @@ var is_grounded: bool = false
 
 func _ready():
 	# Cache bone indices
-	foot_bone_left_idx = skeleton.find_bone("toe.L")
-	foot_bone_right_idx = skeleton.find_bone("toe.R")
+	foot_bone_left_idx = skeleton.find_bone("DEF-toe.L")
+	foot_bone_right_idx = skeleton.find_bone("DEF-toe.R")
 	
 	if foot_bone_left_idx == -1 or foot_bone_right_idx == -1:
 		push_error("FootIKController: Could not find foot bones. Check bone names.")
