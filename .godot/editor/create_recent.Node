@@ -1,4 +1,8 @@
+BoneAttachment3D
 MeshInstance3D
+ConvertTransformModifier3D
+CopyTransformModifier3D
+ModifierBoneTarget3D
 TwoBoneIK3D
 BoneTwistDisperser3D
 PhysicalBoneSimulator3D
