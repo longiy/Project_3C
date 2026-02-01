@@ -3,3 +3,4 @@ res://Shaders/LandscapePBR.gdshader
 res://Assets/Porter/PorterTreeMain.tres
 res://Scenes/CCC_porter.tscn
 res://Scripts/IK/FootIKController.gd
+res://Scenes/SCENE_ENVIRO.tscn

@@ -28,12 +28,12 @@ radius = 0.1
 radius = 0.2
 height = 1.7
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5wxtv"]
-radius = 0.2
-height = 1.7
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_w56hs"]
+radius = 0.29052734
 
 [sub_resource type="Resource" id="Resource_w56hs"]
 script = ExtResource("10_lcxqd")
+jump_height = 0.5
 metadata/_custom_type_script = "uid://bkv8he7g4u73k"
 
 [node name="CccPorter" type="Node3D" unique_id=1352496923 node_paths=PackedStringArray("character_body", "camera_system", "input_coordinator", "movement_system")]
@@ -79,8 +79,8 @@ v_offset = 0.5
 
 [node name="CharacterBody3D" type="CharacterBody3D" parent="." unique_id=1252911616 node_paths=PackedStringArray("skeleton", "character_body", "fabrik_left", "fabrik_right", "ik_target_left", "ik_target_right", "raycast_left", "raycast_right") groups=["player"]]
 collision_layer = 3
-slide_on_ceiling = false
-floor_max_angle = 1.22173
+floor_block_on_wall = false
+floor_max_angle = 2.6179938
 script = ExtResource("7_w56hs")
 skeleton = NodePath("PorterMain/Porter/rig/Skeleton3D")
 character_body = NodePath(".")
@@ -88,8 +88,9 @@ fabrik_left = NodePath("PorterMain/Porter/rig/Skeleton3D/FABRIK_LefLeg")
 fabrik_right = NodePath("PorterMain/Porter/rig/Skeleton3D/FABRIK_RightLeg")
 ik_target_left = NodePath("PorterMain/IKTargetLeft")
 ik_target_right = NodePath("PorterMain/IKTargetRight")
-raycast_left = NodePath("PorterMain/IKTargetLeft/FootRayLeft")
-raycast_right = NodePath("PorterMain/IKTargetRight/FootRayRight")
+raycast_left = NodePath("FootRayLeft")
+raycast_right = NodePath("FootRayRight")
+skeleton_lerp_speed = 1.0
 
 [node name="CapsulePreview" type="MeshInstance3D" parent="CharacterBody3D" unique_id=419172217]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
@@ -97,11 +98,44 @@ visible = false
 mesh = SubResource("CapsuleMesh_rsiw4")
 
 [node name="CapsuleCollider" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1559916990]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
-shape = SubResource("CapsuleShape3D_5wxtv")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -0.12864394)
+shape = SubResource("CapsuleShape3D_w56hs")
 debug_color = Color(0, 0.6, 0.69803923, 0.8745098)
 
 [node name="PorterMain" parent="CharacterBody3D" unique_id=686191924 instance=ExtResource("5_ie3xu")]
+
+[node name="Skeleton3D" parent="CharacterBody3D/PorterMain/Porter/rig" parent_id_path=PackedInt32Array(686191924, 81651980) index="0" unique_id=1782406787]
+bones/18/position = Vector3(0.15951495, 1.3456192, -0.027196717)
+bones/18/rotation = Quaternion(-0.14518961, -0.07298705, 0.979691, -0.11746637)
+bones/18/scale = Vector3(1.0000001, 1, 1)
+bones/19/rotation = Quaternion(-6.7654216e-17, 5.7742e-08, 5.58794e-09, 1)
+bones/19/scale = Vector3(0.99999994, 1.0000001, 1.0000002)
+bones/20/rotation = Quaternion(0.15972856, 4.824005e-07, 4.7403507e-08, 0.98716104)
+bones/20/scale = Vector3(0.99999994, 0.9999996, 0.9999995)
+bones/21/rotation = Quaternion(-6.798655e-08, -7.031489e-08, 3.725275e-09, 1)
+bones/21/scale = Vector3(0.99999994, 1, 0.9999999)
+bones/22/rotation = Quaternion(-0.06327868, 0.000782346, 0.012337075, 0.9979194)
+bones/22/scale = Vector3(0.9999998, 0.9999997, 0.99999976)
+bones/24/position = Vector3(-0.15951504, 1.345619, -0.02719673)
+bones/24/rotation = Quaternion(0.14518963, -0.07298612, 0.97969115, 0.11746637)
+bones/24/scale = Vector3(1.0000001, 0.99999994, 1)
+bones/25/rotation = Quaternion(2.04891e-08, 5.5879347e-08, 6.891784e-08, 1)
+bones/25/scale = Vector3(1.0000004, 1.0000002, 1.0000001)
+bones/26/rotation = Quaternion(0.15972674, -6.0742025e-07, 8.265343e-08, 0.98716134)
+bones/26/scale = Vector3(0.9999995, 0.9999999, 0.9999998)
+bones/27/rotation = Quaternion(-1.3038531e-08, 5.1688417e-08, 5.2154064e-08, 1)
+bones/27/scale = Vector3(0.99999994, 0.99999964, 1)
+bones/28/rotation = Quaternion(-0.06327774, -0.0007823048, -0.012337247, 0.99791944)
+bones/28/scale = Vector3(1, 1, 0.99999964)
+
+[node name="AnimationTree" parent="CharacterBody3D/PorterMain/Porter" parent_id_path=PackedInt32Array(686191924, 1438479390) index="1" unique_id=787079905 node_paths=PackedStringArray("movement_system")]
+movement_system = NodePath("../../../../MovementSystem")
+
+[node name="FootRayLeft" type="RayCast3D" parent="CharacterBody3D" unique_id=414805567]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.15, 0, 0)
+
+[node name="FootRayRight" type="RayCast3D" parent="CharacterBody3D" unique_id=1308032402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.15, 0, 0)
 
 [node name="InputCoordinator" type="Node" parent="." unique_id=563899000]
 script = ExtResource("6_uj5ul")
