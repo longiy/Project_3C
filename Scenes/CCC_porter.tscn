@@ -97,7 +97,7 @@ visible = false
 mesh = SubResource("CapsuleMesh_rsiw4")
 
 [node name="CapsuleCollider" type="CollisionShape3D" parent="CharacterBody3D" unique_id=1559916990]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0157238, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
 shape = SubResource("CapsuleShape3D_5wxtv")
 debug_color = Color(0, 0.6, 0.69803923, 0.8745098)
 
@@ -143,7 +143,7 @@ settings/0/extend_end_bone = false
 
 [node name="TwoBoneIK_RightLeg" type="TwoBoneIK3D" parent="CharacterBody3D/PorterMain/Porter/rig/Skeleton3D" index="2" unique_id=117705827]
 setting_count = 1
-settings/0/target_node = NodePath("../../../../../IKTargetRight")
+settings/0/target_node = NodePath("../../../../../FootRayRight")
 settings/0/pole_node = NodePath("")
 settings/0/root_bone_name = "DEF-thigh.R"
 settings/0/root_bone = 15
